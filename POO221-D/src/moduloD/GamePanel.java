@@ -38,12 +38,8 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	KeyHandler keyH = new KeyHandler();
 	Thread gameThread; //precisa do implements Runnable que gera o método Run
-	Player player = new Player(this, keyH);
+	PlayerCharacter player = new PlayerCharacter(this, keyH);
 	
-	// Posição Inicial do Jogador
-	int playerX = 100; // coordenada X
-	int playerY = 100; // coordenada Y
-	int playerSpeed = 4;
 	
 	public GamePanel() {
 		
