@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -13,11 +14,14 @@ public class UI {
 	GamePanel gp;
 	Graphics2D g2;
 	Font maruMonica;
-	//BufferedImage keyImage;
+	BufferedImage sMarkImage1 , sMarkImage2, sMarkImage3, sMarkImage4;
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
 	public boolean gameFinished = false;
+	public String currentDialogue = "";
+	public int commandNum = 0;
+	public int titleScreenState = 0;
 	
 	double playTime;
 	DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -33,8 +37,14 @@ public class UI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//OBJ_Key key = new OBJ_Key();
-		//keyImage = key.image;
+		OBJ_SacrificeMark01 sMark1 = new OBJ_SacrificeMark01(gp);
+		sMarkImage1 = sMark1.image;
+		OBJ_SacrificeMark02 sMark2 = new OBJ_SacrificeMark02(gp);
+		sMarkImage2 = sMark2.image;
+		OBJ_SacrificeMark03 sMark3 = new OBJ_SacrificeMark03(gp);
+		sMarkImage3 = sMark3.image;
+		OBJ_SacrificeMark04 sMark4 = new OBJ_SacrificeMark04(gp);
+		sMarkImage4 = sMark4.image;
 	}
 	
 	public void showMessage(String text) {
@@ -123,13 +133,85 @@ public class UI {
 	
 	public void drawTitleScreen() {
 		
-		// TITLE NAME
-		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-		g2.setColor(Color.orange);
-		String text = "DUNGEON";
-		int x = getXCenterText(text);
-		int y = gp.screenHeight/2 - gp.tileSize*3;
-		g2.drawString(text, x, y);
+		if(titleScreenState == 0) {
+			// TITLE NAME
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+			String text = "DUNGEON";
+			int x = getXCenterText(text);
+			int y = gp.screenHeight/2 - gp.tileSize*3;
+			//SHADOW
+			g2.setColor(Color.red);
+			g2.drawString(text, x+5, y+5);
+			//MAIN COLOR
+			g2.setColor(Color.orange);
+			g2.drawString(text, x, y);
+			
+			//SACRIFICE MARK
+			x = gp.screenWidth/2 - gp.tileSize;
+			y += gp.tileSize/2;
+			g2.drawImage(sMarkImage1, x, y, gp.tileSize*1, gp.tileSize*1, null);
+			x += gp.tileSize;
+			g2.drawImage(sMarkImage2, x, y, gp.tileSize*1, gp.tileSize*1, null);
+			y += gp.tileSize;
+			g2.drawImage(sMarkImage4, x, y, gp.tileSize*1, gp.tileSize*1, null);
+			x -= gp.tileSize;
+			g2.drawImage(sMarkImage3, x, y, gp.tileSize*1, gp.tileSize*1, null);
+			
+			//MENU
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 35F));
+			
+			text = "NEW GAME";
+			x = getXCenterText(text);
+			y = gp.screenHeight/2 + gp.tileSize;
+			g2.drawString(text, x, y);
+			if(commandNum == 0) {
+				g2.drawString(">", x - gp.tileSize, y);
+			}
+			
+			text = "ACHIEVEMENTS";
+			x = getXCenterText(text);
+			y += gp.tileSize*1.5;
+			g2.drawString(text, x, y);
+			if(commandNum == 1) {
+				g2.drawString(">", x - gp.tileSize, y);
+			}
+			
+			text = "EXIT GAME";
+			x = getXCenterText(text);
+			y += gp.tileSize*1.5;
+			g2.drawString(text, x, y);
+			if(commandNum == 2) {
+				g2.drawString(">", x - gp.tileSize, y);
+			}
+		}
+		else if(titleScreenState == 1) {
+			
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+			g2.setColor(Color.orange);
+			
+			String text = "ACHIEVEMENTS";
+			int x = getXCenterText(text);
+			int y = gp.screenHeight/2 - gp.tileSize*4;
+			g2.drawString(text, x, y);
+			
+			y += gp.tileSize/2;
+			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			
+			y += gp.tileSize*2.5;
+			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			
+			y += gp.tileSize*2.5;
+			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			
+			
+			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 35F));
+			text = "BACK";
+			x = getXCenterText(text) + gp.tileSize*4;
+			y += gp.tileSize*3;
+			g2.drawString(text, x, y);
+			
+			g2.drawString(">", x - gp.tileSize, y);
+		}
 	}
 	
 	public void drawPauseScreen() {
