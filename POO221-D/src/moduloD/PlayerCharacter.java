@@ -2,6 +2,7 @@ package moduloD;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -9,45 +10,72 @@ import javax.imageio.ImageIO;
 
 public class PlayerCharacter extends Entity{
 	
-	GamePanel gp;
 	KeyHandler keyH;
 	
+	public final int screenX;
+	public final int screenY;
+	
+	int hasBehelit = 0;
+	int standCounter = 0;
+	//boots timer
+	int bootCounter = 0;
+	boolean hasBoots;
+	
 	public PlayerCharacter(GamePanel gp, KeyHandler keyH) {
-		this.setGamePanel(gp);
+		
+		super(gp);
+		
 		this.setKeyHandler(keyH);
+		
+		screenX = gp.screenWidth/2 - (gp.tileSize/2);
+		screenY = gp.screenHeight/2 - (gp.tileSize/2);
+		
+		solidArea = new Rectangle();
+		solidArea.x = 8;
+		solidArea.y = 16;
+		solidAreaDefaultX = solidArea.x;
+		solidAreaDefaultY = solidArea.y;
+		solidArea.width = 32;
+		solidArea.height = 32;
+		
 		setDefaultValues();
 		getPlayerImage();
 	}
 	
-	public void setGamePanel(GamePanel gp) {
-		this.gp = gp;
-	}
 	
 	public void setKeyHandler(KeyHandler kh) {
 		this.keyH = kh;
 	}
 	
 	public void setDefaultValues() {
-		x = 100;
-		y = 100;
+		worldX = gp.tileSize * 14; //coordenada do mapa
+		worldY = gp.tileSize * 4; //coordenada do mapa
 		speed = 4;
 		direction = "down";
 	}
 	
 	public void getPlayerImage() {
+		down1 = setup("Guts2DFrenteDireita");
+		down2 = setup("Guts2DFrenteEsquerda");
+		left1 = setup("Guts2DEsquerda1");
+		left2 = setup("Guts2DEsquerda2");
+		right1 = setup("Guts2DDireita1");
+		right2 = setup("Guts2DDireita2");
+		up1 = setup("Guts2DCimaDireita");
+		up2 = setup("Guts2DCimaEsquerda");
+	}
+	
+	public BufferedImage setup(String imageName) {
+		UtilityTool uTool = new UtilityTool();
+		BufferedImage image = null;
+		
 		try {
-			//TODO o resto das imagens
-			down1 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DFrenteDireita.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DFrenteEsquerda.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DEsquerda1.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DEsquerda2.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DDireita1.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DDireita2.png"));
-			up1 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DCimaDireita.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/player/Guts2DCimaEsquerda.png"));
-		} catch(IOException ioe) {
-			ioe.printStackTrace();
+			image = ImageIO.read(getClass().getResourceAsStream("/player/"+imageName+".png"));
+			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return image;
 	}
 	
 	public void update() {
@@ -56,16 +84,37 @@ public class PlayerCharacter extends Entity{
 			//atualização de movimento
 			if(keyH.upPressed == true) {
 				direction = "up";
-				y -= speed;
 			} else if (keyH.downPressed == true) {
-				direction = "down";
-				y += speed;
+				direction = "down";	
 			} else if (keyH.rightPressed == true) {
-				direction = "right";
-				x += speed;
+				direction = "right";	
 			} else if (keyH.leftPressed == true) {
 				direction = "left";
-				x -= speed;
+			}
+			
+			// CHECK TILE COLLISION
+			collisionOn = false;
+			gp.cChecker.checkTile(this);
+			
+			//CHECK OBJECT COLLISION
+			int objIndex = gp.cChecker.checkObject(this, true);
+			pickUpObject(objIndex);
+			
+			if(collisionOn == false){
+				switch(direction) {
+				case "up":
+					worldY -= speed;
+					break;
+				case "down":
+					worldY += speed;
+					break;
+				case "right":
+					worldX += speed;
+					break;
+				case "left":
+					worldX -= speed;
+					break;
+				}
 			}
 			
 			spriteCounter++;
@@ -77,6 +126,52 @@ public class PlayerCharacter extends Entity{
 					spriteNum = 1;
 				}
 				spriteCounter = 0;
+			}
+		} else {
+			standCounter++;
+			
+			if(standCounter == 10) {
+				spriteNum = 1;
+				standCounter = 0;
+			}
+		}
+		if(hasBoots == true) {
+			bootCounter++;
+			if(bootCounter > 600) {
+				speed -= 1;
+				hasBoots = false;
+				bootCounter = 0;
+			}
+		}
+	}
+	
+	public void pickUpObject(int i) {
+		if(i != 999) {
+			
+			String objectName = gp.obj[i].name;
+			
+			switch(objectName) {
+			case"Behelit":
+				hasBehelit++;
+				gp.playSE(1);
+				gp.obj[i] = null;
+				gp.ui.showMessage("A conexão entre os mundos foi restaurada...");
+				break;
+			case "Boots":
+				if(hasBoots == false) {
+					speed += 1;
+					hasBoots = true;
+					gp.obj[i] = null;
+					gp.ui.showMessage("Um novo par de botas...");
+				}
+				break;
+			case "ZoddHorn":
+				gp.obj[2] = null;
+				gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
+				gp.ui.gameFinished = true;
+				gp.stopMusic();
+				//gp.playSE(x); TODO adicionar SE para completar o jogo
+				break;
 			}
 		}
 	}
@@ -118,6 +213,25 @@ public class PlayerCharacter extends Entity{
 			}
 			break;
 		}
-		g2.drawImage(image, x, y, gp.tamanhoBloco, gp.tamanhoBloco, null);
+		
+		int x = screenX;
+		int y = screenY;
+		
+		if(screenX > worldX) {
+			x = worldX;
+		}
+		if(screenY > worldY) {
+			y = worldY;
+		}
+		int rightOffset = gp.screenWidth - screenX;
+		if(rightOffset > gp.worldWidth - worldX) {
+			x = gp.screenWidth - (gp.worldWidth - worldX);
+		}
+		int bottomOffset = gp.screenHeight - screenY;
+		if(bottomOffset > gp.worldHeight - worldY) {
+			y = gp.screenHeight - (gp.worldHeight - worldY);
+		}
+		
+		g2.drawImage(image, x, y, null);
 	}
 }

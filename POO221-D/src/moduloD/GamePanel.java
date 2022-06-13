@@ -21,33 +21,63 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements Runnable{
 	
 	//CONFIGURAÇÕES DE TELA
-	final int tamanhoBlocoPadrao = 16; // bloco de 16x16 pixels - padrão de tamanho 2D
-	final int escala = 3; 
+	final int tileSizeDefault = 16; // bloco de 16x16 pixels - padrão de tamanho 2D
+	final int scale = 3; 
 	 //16x16 é muito pequeno pra resolução dos monitores atuais, por isso precisamos ampliar o
 	 //bloco padrão através de uma escala
 	
-	final int tamanhoBloco = tamanhoBlocoPadrao * escala; //tamanho do bloco real, após conversão
+	final int tileSize = tileSizeDefault * scale; //tamanho do bloco real, após conversão
 	//resultado de bloco 48x48
-	final int totalColTela = 11; // 500/48 = 10.4
-	final int totalLinTela = 10; // 480/48 = 10
-	final int comprimentoTela = 500; //o certo seria: 11*48, mas isso foge das especif. do trabalho
-	final int alturaTela = 480; //10*48 = 480
+	final int maxScreenCol = 11; // 500/48 = 10.4
+	final int maxScreenRow = 10; // 480/48 = 10
+	final int screenWidth = 500; //o certo seria: 11*48, mas isso foge das especif. do trabalho
+	final int screenHeight = 480; //10*48 = 480
+	
+	// WORLD SETTINGS
+	public final int maxWorldCol = 29; //DEPENDE DO MAPA!! Nesse caso são as configurações do map01
+	public final int maxWorldRow = 10;
+	public final int worldWidth = tileSize * maxWorldCol;
+	public final int worldHeight = tileSize * maxWorldRow;
 	
 	// FPS - Frames Per Second
 	int FPS = 60;
 	
-	KeyHandler keyH = new KeyHandler();
+	TileManager tileM = new TileManager(this);
+	KeyHandler keyH = new KeyHandler(this);
+	Sound music = new Sound();
+	Sound se = new Sound();
+	CollisionChecker cChecker = new CollisionChecker(this);
+	AssetSetter aSetter = new AssetSetter(this);
+	UI ui = new UI(this);
 	Thread gameThread; //precisa do implements Runnable que gera o método Run
+	
+	//ENTITY AND OBJECT
 	PlayerCharacter player = new PlayerCharacter(this, keyH);
+	SuperObject obj[] = new SuperObject[10];
+	
+	// GAME STATE
+	public int gameState;
+	public final int titleState = 0;
+	public final int playState = 1;
+	public final int pauseState = 2;
+	
 	
 	
 	public GamePanel() {
 		
-		this.setPreferredSize(new Dimension(comprimentoTela, alturaTela));
+		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH); //vai escutar o evento da tecla e mandar pra nossa classe
 		this.setFocusable(true); //agora o panel está "focado" para receber o input
+	}
+	
+	public void setupGame() {
+		aSetter.setObject();
+		
+		playMusic(0);
+		
+		gameState = titleState;
 	}
 
 	public void startGameThread() {
@@ -97,8 +127,12 @@ public class GamePanel extends JPanel implements Runnable{
 	}
 	
 	public void update() {
-		
-		player.update();
+		if(gameState == playState) {
+			player.update();
+		}
+		if(gameState == pauseState) {
+			//nada
+		}
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -106,8 +140,61 @@ public class GamePanel extends JPanel implements Runnable{
 		
 		Graphics2D g2 = (Graphics2D)g; //Subclasse de Graphics que dá mais controle ao usuário sobre elementos 2D
 		
-		player.draw(g2);
+		//DEBUG
+		long drawStart = 0;
+		if(keyH.checkDrawTime == true) {
+			drawStart = System.nanoTime();
+		}
 		
-		g2.dispose();
+		// TITLE SCREEN
+		if(gameState == titleState) {
+			ui.draw(g2);
+		}
+		else {
+			// TILE
+			tileM.draw(g2);//Primeiro os tiles, pro player dar overlay
+			
+			//OBJECT
+			for(int i = 0; i < obj.length; i++) {
+				if(obj[i] != null) {
+					obj[i].draw(g2, this);
+				}
+			}
+			
+			// PLAYER
+			player.draw(g2);
+			
+			//UI
+			ui.draw(g2);
+			
+			
+		}
+		//DEBUG
+		if(keyH.checkDrawTime == true) {
+			long drawEnd = System.nanoTime();
+			long passed = drawEnd - drawStart;
+			g2.setColor(Color.white);
+			g2.drawString("Draw Time: "+passed, 10, 380);
+			//System.out.println("Draw t: "+passed);
+			g2.drawString("Boot Counter: "+player.bootCounter, 10, 400);
+			g2.drawString("Speed: "+player.speed, 10, 420);
+		
+			g2.dispose();
+		}
+	}
+	
+	public void playMusic (int i) {
+		music.setFile(i);
+		music.play();
+		music.loop();
+	}
+	
+	public void stopMusic() {
+		music.stop();
+	}
+	
+	public void playSE(int i) {
+		se.setFile(i);
+		se.play();
 	}
 }
