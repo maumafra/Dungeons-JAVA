@@ -7,7 +7,7 @@ public class AssetSetter {
 	public AssetSetter(GamePanel gp) {
 		this.gp = gp;
 	}
-	
+
 	public void setObject() {
 		gp.obj[0] = new OBJ_Behelit(gp);
 		gp.obj[0].worldX = 14 * gp.tileSize;

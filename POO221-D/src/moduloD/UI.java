@@ -15,6 +15,7 @@ public class UI {
 	Graphics2D g2;
 	Font maruMonica;
 	BufferedImage sMarkImage1 , sMarkImage2, sMarkImage3, sMarkImage4;
+	BufferedImage fullHeart, emptyHeart, halfHeart;
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
@@ -37,14 +38,20 @@ public class UI {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		OBJ_SacrificeMark01 sMark1 = new OBJ_SacrificeMark01(gp);
-		sMarkImage1 = sMark1.image;
-		OBJ_SacrificeMark02 sMark2 = new OBJ_SacrificeMark02(gp);
-		sMarkImage2 = sMark2.image;
-		OBJ_SacrificeMark03 sMark3 = new OBJ_SacrificeMark03(gp);
-		sMarkImage3 = sMark3.image;
-		OBJ_SacrificeMark04 sMark4 = new OBJ_SacrificeMark04(gp);
-		sMarkImage4 = sMark4.image;
+		
+		// CREATE TITLE OBJECT
+		Entity sMark = new OBJ_SacrificeMark(gp);
+		sMarkImage1 = sMark.image;
+		sMarkImage2 = sMark.image2;
+		sMarkImage3 = sMark.image3;
+		sMarkImage4 = sMark.image4;
+		
+		// CREATE HUD OBJECT
+		Entity heart = new OBJ_Heart(gp);
+		fullHeart = heart.image;
+		halfHeart = heart.image2;
+		emptyHeart = heart.image3;
+		
 	}
 	
 	public void showMessage(String text) {
@@ -97,14 +104,16 @@ public class UI {
 				
 				gp.gameThread = null;
 			} else {
+				drawPlayerLife();
+				
+				//FPS
 				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
 				g2.setColor(Color.white);
-				g2.drawString("FPS: "+gp.FPS, 25, 50);
+				g2.drawString("FPS: "+gp.FPS, gp.tileSize*9 - gp.tileSize/2, 50);
 				
 				//TIME
 				playTime += (double)1/60;
-				String text = dFormat.format(playTime)+" s";
-				g2.drawString(text, getXCenterText(text), gp.tileSize*1);
+				drawPlayTime();
 				
 				//MESSAGE
 				if(messageOn == true) {
@@ -128,9 +137,46 @@ public class UI {
 		//PAUSE STATE
 		if(gp.gameState == gp.pauseState) {
 			drawPauseScreen();
+			drawPlayerLife();
+			drawPlayTime();
 		}
 	}
+	public void drawPlayTime() {
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
+		String text = ""+dFormat.format(playTime);
+		g2.drawString(text+" s", getXCenterText(text), gp.tileSize*1);
+	}
 	
+	public void drawPlayerLife() {
+		
+		int x = gp.tileSize/2 - 10;
+		int y = gp.tileSize/2 - 10;
+		int i = 0;
+		
+		// DRAW MAX LIFE
+		while(i < gp.player.maxLife/2) {
+			g2.drawImage(emptyHeart, x, y, null);
+			i++;
+			x += gp.tileSize + 5;
+		}
+		
+		//RESET
+		x = gp.tileSize/2 - 10;
+		y = gp.tileSize/2 - 10;
+		i = 0;
+		
+		//DRAW CURRENT LIFE
+		while(i < gp.player.life) {
+			g2.drawImage(halfHeart, x, y, null);
+			i++;
+			if(i < gp.player.life) {
+				g2.drawImage(fullHeart, x, y, null);
+			}
+			i++;
+			x += gp.tileSize + 5;
+		}
+	}
+
 	public void drawTitleScreen() {
 		
 		if(titleScreenState == 0) {
@@ -222,7 +268,7 @@ public class UI {
 		
 		g2.drawString(text, x, y);
 		
-	}
+	}	
 	
 	public int getXCenterText(String text) {
 		int textLenght = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();

@@ -4,21 +4,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class OBJ_ZoddHorn extends SuperObject{
-	
-	GamePanel gp;
-	
+public class OBJ_ZoddHorn extends Entity{
+
 	public OBJ_ZoddHorn(GamePanel gp) {
 		
-		this.gp = gp;
+		super(gp);
 		
 		name = "ZoddHorn";
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/objects/ZoddHorn.png"));
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		down1 = setup("/objects/ZoddHorn");
+		pickup = true;
 	}
 }

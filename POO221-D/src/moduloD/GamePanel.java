@@ -15,6 +15,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.JPanel;
 
@@ -25,7 +28,6 @@ public class GamePanel extends JPanel implements Runnable{
 	final int scale = 3; 
 	 //16x16 é muito pequeno pra resolução dos monitores atuais, por isso precisamos ampliar o
 	 //bloco padrão através de uma escala
-	
 	final int tileSize = tileSizeDefault * scale; //tamanho do bloco real, após conversão
 	//resultado de bloco 48x48
 	final int maxScreenCol = 11; // 500/48 = 10.4
@@ -42,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable{
 	// FPS - Frames Per Second
 	int FPS = 60;
 	
+	//SYSTEM
 	TileManager tileM = new TileManager(this);
 	KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
@@ -53,7 +56,9 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//ENTITY AND OBJECT
 	PlayerCharacter player = new PlayerCharacter(this, keyH);
-	SuperObject obj[] = new SuperObject[10];
+	Entity obj[] = new Entity[10];
+	Entity npc[] = new Entity[10];//TODO se quiser adicionar os NPCs futuramente
+	ArrayList<Entity> entityList = new ArrayList<>(); //arraylist para dar prioridade de desenho para a entidade de maior y
 	
 	// GAME STATE
 	public int gameState;
@@ -152,20 +157,41 @@ public class GamePanel extends JPanel implements Runnable{
 		}
 		else {
 			// TILE
-			tileM.draw(g2);//Primeiro os tiles, pro player dar overlay
+			tileM.draw(g2);//Primeiro os tiles, para  as entidades/objetos darem overlay
 			
-			//OBJECT
+			//ADD ENTITIES TO ARRAYLIST
+			entityList.add(player);
+			/*TODO caso implementar NPCs
+			for(int i = 0; i < npc.length; i++) {
+				if(npc[i] != null) {
+					entityList.add(npc[i]);
+				}
+			}*/
 			for(int i = 0; i < obj.length; i++) {
 				if(obj[i] != null) {
-					obj[i].draw(g2, this);
+					entityList.add(obj[i]);
 				}
 			}
 			
-			// PLAYER
-			player.draw(g2);
+			//SORT
+			Collections.sort(entityList, new Comparator<Entity>() {
+				@Override
+				public int compare(Entity e1, Entity e2) {
+					int result = Integer.compare(e1.worldY, e2.worldY);
+					return result;
+				}
+			});
+			
+			//DRAW ENTITIES
+			for(Entity e : entityList) {
+				e.draw(g2);
+			}
+			
+			//CLEARING ENTITY LIST
+			entityList.clear();
 			
 			//UI
-			ui.draw(g2);
+			ui.draw(g2);//Ultima layer
 			
 			
 		}
@@ -175,7 +201,7 @@ public class GamePanel extends JPanel implements Runnable{
 			long passed = drawEnd - drawStart;
 			g2.setColor(Color.white);
 			g2.drawString("Draw Time: "+passed, 10, 380);
-			//System.out.println("Draw t: "+passed);
+			System.out.println("Draw t: "+passed);
 			g2.drawString("Boot Counter: "+player.bootCounter, 10, 400);
 			g2.drawString("Speed: "+player.speed, 10, 420);
 		

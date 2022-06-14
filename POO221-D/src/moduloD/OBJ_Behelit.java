@@ -4,21 +4,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class OBJ_Behelit extends SuperObject{
+public class OBJ_Behelit extends Entity{
 	
-	GamePanel gp;
-
 	public OBJ_Behelit(GamePanel gp) {
 		
-		this.gp = gp;
+		super(gp);
 		
 		name = "Behelit";
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/objects/Behelit.png")); 
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		down1 = setup("/objects/Behelit");
+		pickup = true;
 	}
 }

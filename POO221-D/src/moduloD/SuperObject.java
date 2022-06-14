@@ -5,8 +5,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class SuperObject {
-
-	public BufferedImage image;
+//TODO DELETAR CLASSE, POR ENQUANTO VOU DEIXAR AQUI PRA USAR DE REFERENCIA
+	public BufferedImage image, image2, image3;
 	public String name;
 	public boolean collision = false;
 	public int worldX, worldY;

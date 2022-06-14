@@ -52,31 +52,24 @@ public class PlayerCharacter extends Entity{
 		worldY = gp.tileSize * 4; //coordenada do mapa
 		speed = 4;
 		direction = "down";
+		
+		// PLAYER STATUS
+		maxLife = 6;
+		life = maxLife;
 	}
 	
 	public void getPlayerImage() {
-		down1 = setup("Guts2DFrenteDireita");
-		down2 = setup("Guts2DFrenteEsquerda");
-		left1 = setup("Guts2DEsquerda1");
-		left2 = setup("Guts2DEsquerda2");
-		right1 = setup("Guts2DDireita1");
-		right2 = setup("Guts2DDireita2");
-		up1 = setup("Guts2DCimaDireita");
-		up2 = setup("Guts2DCimaEsquerda");
+		down1 = setup("/player/Guts2DFrenteDireita");
+		down2 = setup("/player/Guts2DFrenteEsquerda");
+		left1 = setup("/player/Guts2DEsquerda1");
+		left2 = setup("/player/Guts2DEsquerda2");
+		right1 = setup("/player/Guts2DDireita1");
+		right2 = setup("/player/Guts2DDireita2");
+		up1 = setup("/player/Guts2DCimaDireita");
+		up2 = setup("/player/Guts2DCimaEsquerda");
 	}
 	
-	public BufferedImage setup(String imageName) {
-		UtilityTool uTool = new UtilityTool();
-		BufferedImage image = null;
-		
-		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/player/"+imageName+".png"));
-			image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return image;
-	}
+
 	
 	public void update() {
 		
@@ -99,6 +92,10 @@ public class PlayerCharacter extends Entity{
 			//CHECK OBJECT COLLISION
 			int objIndex = gp.cChecker.checkObject(this, true);
 			pickUpObject(objIndex);
+			
+			//CHECK NPC COLLISION
+			//int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+			//interactNPC(npcIndex);
 			
 			if(collisionOn == false){
 				switch(direction) {
@@ -170,16 +167,21 @@ public class PlayerCharacter extends Entity{
 				gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
 				gp.ui.gameFinished = true;
 				gp.stopMusic();
-				//gp.playSE(x); TODO adicionar SE para completar o jogo
+				//gp.playSE(1); TODO adicionar SE para completar o jogo
 				break;
 			}
+		}
+	}
+	
+	public void interactNPC(int i) {
+		if(i != 999) {
+			
 		}
 	}
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
 		switch(direction) {
-		//TODO os cases e retirar default
 		case "down":
 			if(spriteNum == 1) {
 				image = down1;
