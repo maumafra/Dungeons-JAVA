@@ -1,0 +1,22 @@
+Nome do jogo: DUNGEON
+
+Tipo: Sobrevivência em hordas de inimigos.
+
+Enredo: O lendário capitão de um grupo de mercenários, Guts, é preso em uma masmorra(DUNGEON) 
+repleta de demônios, onde terá que lutar pela sua vida.
+
+Pontuação: A pontuação será calculada de 2 formas: tempo e eliminações. A pontuação do tempo
+será inversamente proporcional ao tempo passado, ou seja, quanto mais tempo se passar, menor
+será a pontuação do jogador. Já as eliminações é mais simples, cada monstro abatido aumentará
+os pontos do jogador. No final, as pontuações de tempo e abate são somadas.
+
+Achievements:
+
+1. Sobreviva por 1 minuto.
+Survive 1 minute.
+
+2. Pegue o Ovo do Rei.
+Collect the King's Egg. (item do jogo)
+
+3. Mate 20 inimigos.
+Kill 20 enemies.
