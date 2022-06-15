@@ -1,0 +1,22 @@
+Conteúdos estudados fora da matéria para este trabalho:
+- Threads.
+- Otimização de escala de imagem.
+- Trabalhar com coordenadas (x,y).
+- Movimentação de personagem em 2 dimensões.
+- Movimentação de câmera em 2 dimensões.
+- Mapa em 2 dimensões
+- Animação.
+- Classe Graphics.
+- Arte pixelada.
+- Classe Font.
+- Classe Rectangle.
+- Classe Clip e URL para sons.
+- Interface KeyListener.
+- Colisão entre entidades.
+
+Conteúdos desta matéria utilizados neste trabalho:
+- Interface(implements).
+- Interface gráfica.
+- Polimorfismo.
+- Herança.
+- Constantes (variáveis com final).
