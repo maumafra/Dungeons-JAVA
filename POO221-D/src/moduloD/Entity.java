@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -19,12 +20,18 @@ public class Entity {
 	public Rectangle solidArea = new Rectangle(0,0,48,48);
 	public int solidAreaDefaultX, solidAreaDefaultY;
 	public boolean collisionOn = false;
+	public int actionLockCounter = 0;
+	public boolean invincible = false;
+	public int invincibleCounter = 0;
 	String dialogues[] = new String[20];
 	int dialogueIndex = 0;
 	public BufferedImage image, image2, image3, image4;
 	public String name;
 	public boolean collision = false;
 	public boolean pickup = false;
+	Random random;
+	public int type; // 0 - player, 1 - npc, 2 - enemy
+	boolean contactPlayer = false;
 	
 	// CHARACTER STATUS
 	public int maxLife;
@@ -45,7 +52,15 @@ public class Entity {
 		
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
-		gp.cChecker.checkPlayer(this);
+		gp.cChecker.checkEntity(this, gp.enem);
+		contactPlayer = gp.cChecker.checkPlayer(this);
+		
+		if(contactPlayer == true && this.type == 2) {
+			if(gp.player.invincible == false) {
+				gp.player.life--;
+				gp.player.invincible = true;
+			}
+		}
 		
 		if(collisionOn == false){
 			switch(direction) {

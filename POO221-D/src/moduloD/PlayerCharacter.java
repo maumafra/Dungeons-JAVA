@@ -1,5 +1,6 @@
 package moduloD;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -97,6 +98,10 @@ public class PlayerCharacter extends Entity{
 			//int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
 			//interactNPC(npcIndex);
 			
+			//CHECK ENEMIES COLLISION
+			int enemyIndex = gp.cChecker.checkEntity(this, gp.enem);
+			contactMonster(enemyIndex);
+			
 			if(collisionOn == false){
 				switch(direction) {
 				case "up":
@@ -132,6 +137,16 @@ public class PlayerCharacter extends Entity{
 				standCounter = 0;
 			}
 		}
+		//CONTADOR INVENCIBILIDADE
+		if(invincible == true) {
+			invincibleCounter++;
+			if(invincibleCounter > 60){
+				invincible = false;
+				invincibleCounter = 0;
+			}
+		}
+		
+		//CONTADOR DO SPEED DA BOTA
 		if(hasBoots == true) {
 			bootCounter++;
 			if(bootCounter > 600) {
@@ -176,6 +191,15 @@ public class PlayerCharacter extends Entity{
 	public void interactNPC(int i) {
 		if(i != 999) {
 			
+		}
+	}
+	
+	public void contactMonster(int i) {
+		if(i != 999) {
+			if(invincible == false) {
+				life--;
+				invincible = true;
+			}
 		}
 	}
 	
@@ -234,6 +258,18 @@ public class PlayerCharacter extends Entity{
 			y = gp.screenHeight - (gp.worldHeight - worldY);
 		}
 		
+		// CHARACTER BLINK AFTER TAKING DAMAGE
+		if(invincible == true) {
+			if(invincibleCounter <= 20 || invincibleCounter > 40) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+			}
+		}
+		
 		g2.drawImage(image, x, y, null);
+		
+		// RESET CHARACTER BLINK TO NOT MIX WITH OTHER ENTITIES
+		if(invincible == true) {
+			g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+		}
 	}
 }
