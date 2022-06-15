@@ -14,6 +14,7 @@ public class UI {
 	GamePanel gp;
 	Graphics2D g2;
 	Font maruMonica;
+	BufferedImage emptyAchievement;
 	BufferedImage sMarkImage1 , sMarkImage2, sMarkImage3, sMarkImage4;
 	BufferedImage fullHeart, emptyHeart, halfHeart;
 	public boolean messageOn = false;
@@ -45,6 +46,9 @@ public class UI {
 		sMarkImage2 = sMark.image2;
 		sMarkImage3 = sMark.image3;
 		sMarkImage4 = sMark.image4;
+		
+		Entity achievement = new OBJ_Achievement(gp);
+		emptyAchievement = achievement.image;
 		
 		// CREATE HUD OBJECT
 		Entity heart = new OBJ_Heart(gp);
@@ -240,17 +244,36 @@ public class UI {
 			int y = gp.screenHeight/2 - gp.tileSize*4;
 			g2.drawString(text, x, y);
 			
+			//FIRST IMAGE
 			y += gp.tileSize/2;
 			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			g2.drawImage(emptyAchievement, x-79, y, gp.tileSize*2, gp.tileSize*2, null);
 			
+			//SECOND IMAGE
 			y += gp.tileSize*2.5;
 			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			g2.drawImage(emptyAchievement, x-79, y, gp.tileSize*2, gp.tileSize*2, null);
 			
+			
+			//THIRD IMAGE
 			y += gp.tileSize*2.5;
 			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
+			g2.drawImage(emptyAchievement, x-79, y, gp.tileSize*2, gp.tileSize*2, null);
+			
+			//TEXT TODO MELHORAR
+			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 30F));
+			g2.setColor(Color.white);
+			x += 30;
+			//FIRST
+			g2.drawString("Kill 20 enemies.", x, gp.tileSize*3);
+			//SECOND
+			g2.drawString("Collect the Egg of the King.", x, gp.tileSize*5 + gp.tileSize/2);
+			//THIR
+			g2.drawString("Survive 1 minute.", x, gp.tileSize*8);
 			
 			
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 35F));
+			g2.setColor(Color.orange);
 			text = "BACK";
 			x = getXCenterText(text) + gp.tileSize*4;
 			y += gp.tileSize*3;

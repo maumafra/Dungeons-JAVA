@@ -58,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable{
 	PlayerCharacter player = new PlayerCharacter(this, keyH);
 	Entity obj[] = new Entity[10];
 	Entity npc[] = new Entity[10];//TODO se quiser adicionar os NPCs futuramente
+	Entity enem[] = new Entity[30];
 	ArrayList<Entity> entityList = new ArrayList<>(); //arraylist para dar prioridade de desenho para a entidade de maior y
 	
 	// GAME STATE
@@ -79,7 +80,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void setupGame() {
 		aSetter.setObject();
-		
+		aSetter.setEnemies();
 		playMusic(0);
 		
 		gameState = titleState;
@@ -133,7 +134,15 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void update() {
 		if(gameState == playState) {
+			//PLAYER
 			player.update();
+			
+			//ENEMIES
+			for(int i = 0; i < enem.length; i++) {
+				if(enem[i] != null) {
+					enem[i].update();
+				}
+			}
 		}
 		if(gameState == pauseState) {
 			//nada
@@ -172,6 +181,11 @@ public class GamePanel extends JPanel implements Runnable{
 					entityList.add(obj[i]);
 				}
 			}
+			for(int i = 0; i < enem.length; i++) {
+				if(enem[i] != null) {
+					entityList.add(enem[i]);
+				}
+			}
 			
 			//SORT
 			Collections.sort(entityList, new Comparator<Entity>() {
@@ -201,9 +215,10 @@ public class GamePanel extends JPanel implements Runnable{
 			long passed = drawEnd - drawStart;
 			g2.setColor(Color.white);
 			g2.drawString("Draw Time: "+passed, 10, 380);
-			System.out.println("Draw t: "+passed);
+			//System.out.println("Draw t: "+passed);
 			g2.drawString("Boot Counter: "+player.bootCounter, 10, 400);
 			g2.drawString("Speed: "+player.speed, 10, 420);
+			g2.drawString("Invincible: "+player.invincibleCounter, 10, 440);
 		
 			g2.dispose();
 		}

@@ -25,4 +25,14 @@ public class AssetSetter {
 		gp.obj[3].worldX = 3 * gp.tileSize;
 		gp.obj[3].worldY = 2 * gp.tileSize;
 	}
+	
+	public void setEnemies() {
+		gp.enem[0] = new MON_SlimeEye(gp);
+		gp.enem[0].worldX = 3 *gp.tileSize;
+		gp.enem[0].worldY = 5 *gp.tileSize;
+		
+		gp.enem[1] = new MON_SlimeEye(gp);
+		gp.enem[1].worldX = 3 *gp.tileSize;
+		gp.enem[1].worldY = 6 *gp.tileSize;
+	}
 }
