@@ -1,5 +1,9 @@
 package moduloD;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 public class CollisionChecker {
 
 	GamePanel gp;
@@ -136,6 +140,52 @@ public class CollisionChecker {
 						entity.collisionOn = true;
 						index = i;
 					}
+				}
+				
+				entity.solidArea.x = entity.solidAreaDefaultX;
+				entity.solidArea.y = entity.solidAreaDefaultY;
+				target[i].solidArea.x = target[i].solidAreaDefaultX;
+				target[i].solidArea.y = target[i].solidAreaDefaultY;
+			}
+		}
+		
+		return index;
+	}
+	
+	//NPC OR MONSTER
+	public int[] checkMultipleEntities(Entity entity, Entity[] target) {
+		int index[] = new int[target.length];
+		
+		for(int i = 0; i < target.length; i++) {
+			if(target[i] != null) {
+				//pegar a posição da área da entidade
+				entity.solidArea.x = entity.worldX + entity.solidArea.x;
+				entity.solidArea.y = entity.worldY + entity.solidArea.y;
+				//pegar a posição de área do objeto
+				target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;
+				target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+				
+				switch(entity.direction) {
+				case"up":
+					entity.solidArea.y -= entity.speed;
+					break;
+				case"down":
+					entity.solidArea.y += entity.speed;
+					break;
+				case"right":
+					entity.solidArea.x += entity.speed;
+					break;
+				case"left":
+					entity.solidArea.x -= entity.speed;
+					break;
+				}
+				if(entity.solidArea.intersects(target[i].solidArea)) {
+					if(target[i] != entity) {
+						entity.collisionOn = true;
+						index[i] = i;
+					}
+				} else {
+					index[i] = 999;
 				}
 				
 				entity.solidArea.x = entity.solidAreaDefaultX;

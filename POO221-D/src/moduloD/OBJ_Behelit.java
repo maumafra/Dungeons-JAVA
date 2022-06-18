@@ -11,7 +11,7 @@ public class OBJ_Behelit extends Entity{
 		super(gp);
 		
 		name = "Behelit";
-		down1 = setup("/objects/Behelit");
+		down1 = setup("/objects/Behelit", gp.tileSize, gp.tileSize);
 		pickup = true;
 	}
 }

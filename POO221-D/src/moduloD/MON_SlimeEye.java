@@ -24,14 +24,14 @@ public class MON_SlimeEye extends Entity{
 	}
 	public void getImage() {
 		//TODO Fazer a animação
-		up1 = setup("/enemies/SlimeEye1");
-		up2 = setup("/enemies/SlimeEye1");
-		down1 = setup("/enemies/SlimeEye1");
-		down2 = setup("/enemies/SlimeEye1");
-		left1 = setup("/enemies/SlimeEye1");
-		left2 = setup("/enemies/SlimeEye1");
-		right1 = setup("/enemies/SlimeEye1");
-		right2 = setup("/enemies/SlimeEye1");
+		up1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
+		up2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
+		down1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
+		down2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
+		left1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
+		left2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
+		right1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
+		right2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
 	}
 	public void setAction() {
 		actionLockCounter ++;
