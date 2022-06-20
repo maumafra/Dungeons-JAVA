@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	//SYSTEM
 	TileManager tileM = new TileManager(this);
-	KeyHandler keyH = new KeyHandler(this);
+	public KeyHandler keyH = new KeyHandler(this);
 	Sound music = new Sound();
 	Sound se = new Sound();
 	CollisionChecker cChecker = new CollisionChecker(this);
@@ -55,11 +55,12 @@ public class GamePanel extends JPanel implements Runnable{
 	Thread gameThread; //precisa do implements Runnable que gera o método Run
 	
 	//ENTITY AND OBJECT
-	PlayerCharacter player = new PlayerCharacter(this, keyH);
-	Entity obj[] = new Entity[10];
-	Entity npc[] = new Entity[10];//TODO se quiser adicionar os NPCs futuramente
-	Entity enem[] = new Entity[30];
-	ArrayList<Entity> entityList = new ArrayList<>(); //arraylist para dar prioridade de desenho para a entidade de maior y
+	public PlayerCharacter player = new PlayerCharacter(this, keyH);
+	public Entity obj[] = new Entity[10];
+	public Entity npc[] = new Entity[10];//TODO se quiser adicionar os NPCs futuramente
+	public Entity enem[] = new Entity[30];
+	public ArrayList<Entity> projectileList = new ArrayList<>();
+	public ArrayList<Entity> entityList = new ArrayList<>(); //arraylist para dar prioridade de desenho para a entidade de maior y
 	
 	// GAME STATE
 	public int gameState;
@@ -140,7 +141,26 @@ public class GamePanel extends JPanel implements Runnable{
 			//ENEMIES
 			for(int i = 0; i < enem.length; i++) {
 				if(enem[i] != null) {
-					enem[i].update();
+					if(enem[i].alive == true && enem[i].dying == false) {
+						enem[i].update();
+					}
+					if(enem[i].alive == false) {
+						enem[i] = null;
+					}
+					
+				}
+			}
+			
+			//PROJECTILES
+			for(int i = 0; i < projectileList.size(); i++) {
+				if(projectileList.get(i) != null) {
+					if(projectileList.get(i).alive == true) {
+						projectileList.get(i).update();
+					}
+					if(projectileList.get(i).alive == false) {
+						projectileList.remove(i);
+					}
+					
 				}
 			}
 		}
@@ -186,6 +206,11 @@ public class GamePanel extends JPanel implements Runnable{
 					entityList.add(enem[i]);
 				}
 			}
+			for(int i = 0; i < projectileList.size(); i++) {
+				if(projectileList.get(i) != null) {
+					entityList.add(projectileList.get(i));
+				}
+			}
 			
 			//SORT
 			Collections.sort(entityList, new Comparator<Entity>() {
@@ -214,11 +239,11 @@ public class GamePanel extends JPanel implements Runnable{
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
 			g2.setColor(Color.white);
-			g2.drawString("Draw Time: "+passed, 10, 380);
+			g2.drawString("Draw Time: "+passed, 10, 360);
 			//System.out.println("Draw t: "+passed);
-			g2.drawString("Boot Counter: "+player.bootCounter, 10, 400);
-			g2.drawString("Speed: "+player.speed, 10, 420);
-			g2.drawString("Invincible: "+player.invincibleCounter, 10, 440);
+			g2.drawString("Boot Counter: "+player.bootCounter, 10, 380);
+			g2.drawString("Speed: "+player.speed, 10, 400);
+			g2.drawString("Invincible: "+player.invincibleCounter, 10, 420);
 		
 			g2.dispose();
 		}

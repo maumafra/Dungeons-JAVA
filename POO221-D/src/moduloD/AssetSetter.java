@@ -24,6 +24,14 @@ public class AssetSetter {
 		gp.obj[3] = new OBJ_Boots(gp);
 		gp.obj[3].worldX = 3 * gp.tileSize;
 		gp.obj[3].worldY = 2 * gp.tileSize;
+		
+		gp.obj[4] = new OBJ_KnifePickup(gp);
+		gp.obj[4].worldX = 6 * gp.tileSize;
+		gp.obj[4].worldY = 6 * gp.tileSize;
+		
+		gp.obj[5] = new OBJ_KnifePickup(gp);
+		gp.obj[5].worldX = 7 * gp.tileSize;
+		gp.obj[5].worldY = 3 * gp.tileSize;
 	}
 	
 	public void setEnemies() {
@@ -66,5 +74,9 @@ public class AssetSetter {
 		gp.enem[9] = new MON_SlimeEye(gp);
 		gp.enem[9].worldX = 2 *gp.tileSize;
 		gp.enem[9].worldY = 4 *gp.tileSize;
+		
+		gp.enem[10] = new MON_GreatGoat(gp);
+		gp.enem[10].worldX = 9 *gp.tileSize;
+		gp.enem[10].worldY = 4 *gp.tileSize;
 	}
 }

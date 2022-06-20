@@ -48,7 +48,6 @@ public class PlayerCharacter extends Entity{
 		getPlayerAttackImage();
 	}
 	
-	
 	public void setKeyHandler(KeyHandler kh) {
 		this.keyH = kh;
 	}
@@ -62,6 +61,10 @@ public class PlayerCharacter extends Entity{
 		// PLAYER STATUS
 		maxLife = 6;
 		life = maxLife;
+		maxAmmo = 6;
+		ammo = maxAmmo;
+		attack = 4;
+		projectile = new OBJ_Knife(gp);
 	}
 	
 	public void getPlayerImage() {
@@ -116,8 +119,10 @@ public class PlayerCharacter extends Entity{
 			interactNPC(999);
 			
 			//CHECK ENEMIES COLLISION
-			int enemyIndex = gp.cChecker.checkEntity(this, gp.enem);
-			contactMonster(enemyIndex);
+			if(invincible == false) {
+				int enemyIndex = gp.cChecker.checkEntity(this, gp.enem);
+				contactMonster(enemyIndex);
+			}
 
 			
 			if(collisionOn == false){
@@ -155,6 +160,22 @@ public class PlayerCharacter extends Entity{
 				standCounter = 0;
 			}
 		}
+		
+		//PROJECTILE
+		if(gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailableCounter == 30
+		  && projectile.haveResource(this) == true) {
+			//SET DEFAULT COORDINATES, DIRECTION AND USER
+			projectile.set(worldX, worldY, direction, true, this);
+			
+			//SUBTRACT ONE PROJECTILE
+			projectile.spendResource(this);
+			
+			//ADD IT TO ARRAYLIST
+			gp.projectileList.add(projectile);
+			
+			shotAvailableCounter = 0;
+		}
+		
 		//CONTADOR INVENCIBILIDADE
 		if(invincible == true) {
 			invincibleCounter++;
@@ -173,6 +194,10 @@ public class PlayerCharacter extends Entity{
 				bootCounter = 0;
 			}
 		}
+		
+		if(shotAvailableCounter < 30) {
+			shotAvailableCounter++;
+		}
 	}
 	
 	public void attacking() {
@@ -181,7 +206,7 @@ public class PlayerCharacter extends Entity{
 		if(attackCounter <= 20) {
 			attackNum = 1;
 		}
-		if(attackCounter > 20 && attackCounter < 50) {
+		if(attackCounter > 20 && attackCounter < 45) {
 			attackNum = 2;
 			
 			//SAVE CURRENT VALUES
@@ -224,7 +249,7 @@ public class PlayerCharacter extends Entity{
 			//int enemyIndex = gp.cChecker.checkEntity(this, gp.enem);
 			int enemyIndex[] = gp.cChecker.checkMultipleEntities(this, gp.enem);
 			for (int i = 0; i<enemyIndex.length; i++) {
-				damageEnemy(enemyIndex[i]);
+				damageEnemy(enemyIndex[i], this.attack);
 			}
 			//damageEnemy(enemyIndex);
 			
@@ -251,22 +276,28 @@ public class PlayerCharacter extends Entity{
 				hasBehelit++;
 				gp.playSE(1);
 				gp.obj[i] = null;
-				gp.ui.showMessage("A conexão entre os mundos foi restaurada...");
+				gp.ui.showMessage("You feel an evil presence watching you...");
 				break;
 			case "Boots":
 				if(hasBoots == false) {
 					speed += 1;
 					hasBoots = true;
 					gp.obj[i] = null;
-					gp.ui.showMessage("Um novo par de botas...");
+					gp.ui.showMessage("Speed Up!");
 				}
 				break;
 			case "ZoddHorn":
-				gp.obj[2] = null;
+				gp.obj[i] = null;
 				gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
 				gp.ui.gameFinished = true;
 				gp.stopMusic();
 				//gp.playSE(1); TODO adicionar SE para completar o jogo
+				break;
+			case "Dropped Knife":
+				if(ammo < maxAmmo) {
+					gp.obj[i] = null;
+					ammo++;
+				}
 				break;
 			}
 		}
@@ -284,22 +315,21 @@ public class PlayerCharacter extends Entity{
 	
 	public void contactMonster(int i) {
 		if(i != 999) {
-			if(invincible == false) {
-				life--;
+			if(invincible == false && gp.enem[i].dying == false) {
+				life-= gp.enem[i].attack;
 				invincible = true;
 			}
 		}
 	}
-
 	
-	public void damageEnemy(int i) {
+	public void damageEnemy(int i, int attack) {
 		if(i != 999) {
 			if(gp.enem[i] != null && gp.enem[i].invincible == false ) {
-				gp.enem[i].life -= 4;
+				gp.enem[i].life -= attack;
 				gp.enem[i].invincible = true;
 				
 				if(gp.enem[i].life <= 0) {
-					gp.enem[i] = null;
+					gp.enem[i].dying = true;
 				}
 			}
 		}

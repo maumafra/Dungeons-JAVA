@@ -2,15 +2,15 @@ package moduloD;
 
 import java.util.Random;
 
-public class MON_SlimeEye extends Entity{
-
-	public MON_SlimeEye(GamePanel gp) {
+public class MON_GreatGoat extends Entity {
+	
+	public MON_GreatGoat(GamePanel gp) {
 		super(gp);
 		
 		type = 2;
-		name = "Eyed Slime";
-		speed = 1;
-		maxLife = 5;
+		name = "Great Goat";
+		speed = 2;
+		maxLife = 10;
 		life = maxLife;
 		
 		solidArea.x = 3;
@@ -20,20 +20,20 @@ public class MON_SlimeEye extends Entity{
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
 		
-		attack = 1;
+		attack = 2;
 		
 		getImage();
 	}
 	public void getImage() {
 		//TODO Fazer a animação
-		up1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
-		up2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
-		down1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
-		down2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
-		left1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
-		left2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
-		right1 = setup("/enemies/SlimeEye1", gp.tileSize, gp.tileSize);
-		right2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
+		up1 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		up2 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		down1 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		down2 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		left1 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		left2 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		right1 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
+		right2 = setup("/enemies/MinotaurTest", gp.tileSize, gp.tileSize);
 	}
 	public void setAction() {
 		actionLockCounter ++;

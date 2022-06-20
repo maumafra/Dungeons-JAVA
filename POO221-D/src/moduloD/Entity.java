@@ -29,23 +29,40 @@ public class Entity {
 	public String direction = "down";
 	public int spriteNum = 1;
 	public boolean collision = false;
-	public boolean pickup = false;
 	public boolean invincible = false;
 	public boolean contactPlayer = false;
 	public boolean collisionOn = false;
 	public boolean attacking = false;
+	public boolean alive = true;
+	public boolean dying = false;
 	
 	//COUNTER
 	public int actionLockCounter = 0;
 	public int invincibleCounter = 0;
+	public int shotAvailableCounter = 0;
 	public int spriteCounter = 0;
+	public int dyingCounter = 0;
 	
 	// CHARACTER STATUS
-	public int type; // 0 - player, 1 - npc, 2 - enemy
 	public String name;
 	public int speed;
 	public int maxLife;
 	public int life;
+	public int maxAmmo;
+	public int ammo;
+	public int attack = 1;
+	public Projectile projectile;
+	
+	//ITEM ATTRIBUTES
+	public String description = "";
+	public int useCost;
+	
+	//TYPE
+	public int type; // 0 - player, 1 - npc, 2 - enemy
+	public final int typePlayer = 0;
+	public final int typeNPC = 1;
+	public final int typeEnemy = 2;
+	public final int typeConsumable = 3;
 	
 	public Entity(GamePanel gp) {
 		this.gp = gp;
@@ -65,11 +82,8 @@ public class Entity {
 		gp.cChecker.checkEntity(this, gp.enem);
 		contactPlayer = gp.cChecker.checkPlayer(this);
 		
-		if(contactPlayer == true && this.type == 2) {
-			if(gp.player.invincible == false) {
-				gp.player.life--;
-				gp.player.invincible = true;
-			}
+		if(contactPlayer == true && this.type == typeEnemy) {
+			damagePlayer(attack);
 		}
 		
 		if(collisionOn == false){
@@ -107,6 +121,13 @@ public class Entity {
 				invincible = false;
 				invincibleCounter = 0;
 			}
+		}
+	}
+	
+	public void damagePlayer(int attack) {
+		if(gp.player.invincible == false) {
+			gp.player.life -= attack;
+			gp.player.invincible = true;
 		}
 	}
 	
@@ -170,7 +191,7 @@ public class Entity {
 				}
 				break;
 			}
-			if(pickup == true) {
+			if(type == typeConsumable) {
 				spriteCounter++;
 				if(spriteCounter > 24) {
 					screenY += 4;
@@ -186,6 +207,9 @@ public class Entity {
 				if(invincibleCounter <= 10 || invincibleCounter > 30) {
 					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
 				}
+			}
+			if(dying == true) {
+				dyingAnimation(g2);
 			}
 			
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
@@ -236,7 +260,7 @@ public class Entity {
 				break;
 			}
 			
-			if(pickup == true) {
+			if(type == typeConsumable) {
 				spriteCounter++;
 				if(spriteCounter > 24) {
 					screenY += 4;
@@ -247,8 +271,58 @@ public class Entity {
 				}
 			}
 			
+			// CHARACTER BLINK AFTER TAKING DAMAGE
+			if(invincible == true) {
+				if(invincibleCounter <= 10 || invincibleCounter > 30) {
+					g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+				}
+			}
+			if(dying == true) {
+				dyingAnimation(g2);
+			}
+			
 			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			
+			// CHARACTER BLINK AFTER TAKING DAMAGE
+			if(invincible == true) {
+				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			}
 		}
+	}
+	
+	public void dyingAnimation(Graphics2D g2) {
+		dyingCounter++;
+		
+		int i = 5;
+		
+		if(dyingCounter <= i) {
+			changeAlpha(g2,0f);
+		}
+		if(dyingCounter > i && dyingCounter <= i*2) {
+			changeAlpha(g2,1f);
+		}
+		if(dyingCounter > i*2 && dyingCounter <= i*3) {
+			changeAlpha(g2,0f);
+		}
+		if(dyingCounter > i*3 && dyingCounter <= i*4) {
+			changeAlpha(g2,1f);
+		}
+		if(dyingCounter > i*4 && dyingCounter <= i*5) {
+			changeAlpha(g2,0f);
+		}
+		if(dyingCounter > i*5 && dyingCounter <= i*6) {
+			changeAlpha(g2,1f);
+		}
+		if(dyingCounter > i*6 && dyingCounter <= i*7) {
+			changeAlpha(g2,0f);
+		}
+		if(dyingCounter > i*7){
+			alive = false;
+		}
+	}
+	
+	public void changeAlpha(Graphics2D g2, float alphaValue) {
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
 	}
 	
 	public BufferedImage setup(String imagePath, int width, int height) {

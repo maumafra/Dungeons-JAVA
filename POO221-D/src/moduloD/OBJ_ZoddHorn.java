@@ -12,6 +12,6 @@ public class OBJ_ZoddHorn extends Entity{
 		
 		name = "ZoddHorn";
 		down1 = setup("/objects/ZoddHorn", gp.tileSize, gp.tileSize);
-		pickup = true;
+		type = typeConsumable;
 	}
 }

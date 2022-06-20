@@ -17,6 +17,7 @@ public class UI {
 	BufferedImage emptyAchievement;
 	BufferedImage sMarkImage1 , sMarkImage2, sMarkImage3, sMarkImage4;
 	BufferedImage fullHeart, emptyHeart, halfHeart;
+	BufferedImage knife;
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
@@ -24,6 +25,7 @@ public class UI {
 	public String currentDialogue = "";
 	public int commandNum = 0;
 	public int titleScreenState = 0;
+	
 	
 	double playTime;
 	DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -55,6 +57,8 @@ public class UI {
 		fullHeart = heart.image;
 		halfHeart = heart.image2;
 		emptyHeart = heart.image3;
+		Entity knifeIcon = new OBJ_Knife(gp);
+		knife = knifeIcon.up1;
 		
 	}
 	
@@ -109,6 +113,7 @@ public class UI {
 				gp.gameThread = null;
 			} else {
 				drawPlayerLife();
+				drawPlayerAmmo();
 				
 				//FPS
 				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
@@ -122,12 +127,12 @@ public class UI {
 				//MESSAGE
 				if(messageOn == true) {
 					
-					if(message.length() == 43) {
+					if(message.length() == 41) {
 						g2.setColor(Color.yellow);
 					} else {
 						g2.setFont(g2.getFont().deriveFont(24F));
 					}
-					g2.drawString(message, 25, 450);
+					g2.drawString(message, 25, 420);
 					
 					messageCounter++;
 					
@@ -149,6 +154,19 @@ public class UI {
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
 		String text = ""+dFormat.format(playTime);
 		g2.drawString(text+" s", getXCenterText(text), gp.tileSize*1);
+	}
+
+	public void drawPlayerAmmo() {
+		int x = gp.tileSize/2 - 30;
+		int y = gp.tileSize*9 - 5;
+		int i = 0;
+				
+		//DRAW CURRENT LIFE
+		while(i < gp.player.ammo) {
+			g2.drawImage(knife, x, y, null);
+			i++;
+			x += 30;
+		}
 	}
 	
 	public void drawPlayerLife() {
