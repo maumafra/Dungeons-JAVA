@@ -34,6 +34,65 @@ public class KeyHandler implements KeyListener{
 		else if(gp.gameState == gp.pauseState) {
 			pauseState(code);
 		}
+		//OPTIONS STATE
+		else if(gp.gameState == gp.optionsState) {
+			optionsState(code);
+		}
+	}
+	
+	public void optionsState(int code) {
+		if(code == KeyEvent.VK_ESCAPE) {
+			gp.gameState = gp.playState;
+		}
+		if(code == KeyEvent.VK_ENTER) {
+			enterPressed = true;
+		}
+		
+		int maxCommandNum = 0;
+		
+		switch(gp.ui.optionsScreenState) {
+		case 0: 
+			maxCommandNum = 4;
+			break;
+		case 2: 
+			maxCommandNum = 1;
+			break;
+		}
+		
+		if(code == KeyEvent.VK_W) {
+			gp.ui.commandNum--;
+			if(gp.ui.commandNum < 0) {
+				gp.ui.commandNum = maxCommandNum;
+			}
+		}
+		if(code == KeyEvent.VK_S) {
+			gp.ui.commandNum++;
+			if(gp.ui.commandNum > maxCommandNum) {
+				gp.ui.commandNum = 0;
+			}
+		}
+		if(code == KeyEvent.VK_A) {
+			if(gp.ui.optionsScreenState == 0) {
+				if(gp.ui.commandNum == 0 && gp.music.volumeScale > 0) {
+					gp.music.volumeScale--;
+					gp.music.checkVolume();
+				}
+				if(gp.ui.commandNum == 1 && gp.se.volumeScale > 0) {
+					gp.se.volumeScale--;
+				}
+			}
+		}
+		if(code == KeyEvent.VK_D) {
+			if(gp.ui.optionsScreenState == 0) {
+				if(gp.ui.commandNum == 0 && gp.music.volumeScale < 5) {
+					gp.music.volumeScale++;
+					gp.music.checkVolume();
+				}
+				if(gp.ui.commandNum == 1 && gp.se.volumeScale < 5) {
+					gp.se.volumeScale++;
+				}
+			}
+		}
 	}
 	
 	public void titleState(int code) {
@@ -53,8 +112,12 @@ public class KeyHandler implements KeyListener{
 			if(code == KeyEvent.VK_ENTER) {
 				if(gp.ui.commandNum == 0) {
 					gp.gameState = gp.playState;
-					gp.stopMusic();
-					gp.playMusic(0);
+					try {
+						gp.stopMusic();
+						gp.playMusic(0);
+					} catch (Exception e) {
+						
+					}
 				}
 				if(gp.ui.commandNum == 1) {
 					gp.ui.titleScreenState = 1;
@@ -91,6 +154,9 @@ public class KeyHandler implements KeyListener{
 		}
 		if(code == KeyEvent.VK_F) {
 			shotKeyPressed = true;
+		}
+		if(code == KeyEvent.VK_ESCAPE) {
+			gp.gameState = gp.optionsState;
 		}
 		//DEBUG
 		if(code == KeyEvent.VK_T) {

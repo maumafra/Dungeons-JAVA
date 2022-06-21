@@ -52,7 +52,9 @@ public class GamePanel extends JPanel implements Runnable{
 	CollisionChecker cChecker = new CollisionChecker(this);
 	AssetSetter aSetter = new AssetSetter(this);
 	UI ui = new UI(this);
+	Config gameConfig = new Config(this);
 	Thread gameThread; //precisa do implements Runnable que gera o método Run
+	public int activations;
 	
 	//ENTITY AND OBJECT
 	public PlayerCharacter player = new PlayerCharacter(this, keyH);
@@ -67,6 +69,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int titleState = 0;
 	public final int playState = 1;
 	public final int pauseState = 2;
+	public final int optionsState = 3;
 	
 	
 	
@@ -77,6 +80,7 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH); //vai escutar o evento da tecla e mandar pra nossa classe
 		this.setFocusable(true); //agora o panel está "focado" para receber o input
+		
 	}
 	
 	public void setupGame() {
@@ -127,6 +131,7 @@ public class GamePanel extends JPanel implements Runnable{
 			
 			if(timer >= 1000000000) {
 				System.out.println("FPS: "+drawCount);
+				System.out.println(activations);
 				drawCount = 0;
 				timer = 0;
 			}
@@ -235,10 +240,11 @@ public class GamePanel extends JPanel implements Runnable{
 			
 		}
 		//DEBUG
-		if(keyH.checkDrawTime == true) {
+		if(keyH.checkDrawTime == true && ui.gameFinished == false) {
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
 			g2.setColor(Color.white);
+			g2.drawString("Activations: "+activations, 10, 340);
 			g2.drawString("Draw Time: "+passed, 10, 360);
 			//System.out.println("Draw t: "+passed);
 			g2.drawString("Boot Counter: "+player.bootCounter, 10, 380);
@@ -262,5 +268,9 @@ public class GamePanel extends JPanel implements Runnable{
 	public void playSE(int i) {
 		se.setFile(i);
 		se.play();
+	}
+	
+	public void incActivations() {
+		activations++;
 	}
 }

@@ -14,6 +14,10 @@ public class Main {
 		GamePanel gamePanel = new GamePanel();
 		window.add(gamePanel);
 		
+		gamePanel.gameConfig.loadConfig();
+		gamePanel.incActivations();
+		gamePanel.gameConfig.saveConfig();
+		
 		window.pack(); //window vai receber o tamanho de GamePanel
 		
 		window.setLocationRelativeTo(null);

@@ -126,6 +126,7 @@ public class Entity {
 	
 	public void damagePlayer(int attack) {
 		if(gp.player.invincible == false) {
+			gp.player.score -= attack*50;
 			gp.player.life -= attack;
 			gp.player.invincible = true;
 		}

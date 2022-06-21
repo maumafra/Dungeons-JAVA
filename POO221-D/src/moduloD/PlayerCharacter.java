@@ -17,6 +17,9 @@ public class PlayerCharacter extends Entity{
 	public final int screenX;
 	public final int screenY;
 	
+	public int score = 0;
+	
+	long timeCounter = 0;
 	int hasBehelit = 0;
 	int standCounter = 0;
 	int attackNum = 1;
@@ -57,6 +60,8 @@ public class PlayerCharacter extends Entity{
 		worldY = gp.tileSize * 4; //coordenada do mapa
 		speed = 4;
 		direction = "down";
+		
+		score = 600;
 		
 		// PLAYER STATUS
 		maxLife = 6;
@@ -195,6 +200,12 @@ public class PlayerCharacter extends Entity{
 			}
 		}
 		
+		timeCounter++;
+		if(timeCounter>=60) {
+			score--;
+			timeCounter = 0;
+		}
+		
 		if(shotAvailableCounter < 30) {
 			shotAvailableCounter++;
 		}
@@ -273,6 +284,7 @@ public class PlayerCharacter extends Entity{
 			
 			switch(objectName) {
 			case"Behelit":
+				score += 1000;
 				hasBehelit++;
 				gp.playSE(1);
 				gp.obj[i] = null;
@@ -280,6 +292,7 @@ public class PlayerCharacter extends Entity{
 				break;
 			case "Boots":
 				if(hasBoots == false) {
+					score += 50;
 					speed += 1;
 					hasBoots = true;
 					gp.obj[i] = null;
@@ -287,6 +300,7 @@ public class PlayerCharacter extends Entity{
 				}
 				break;
 			case "ZoddHorn":
+				score += 5000;
 				gp.obj[i] = null;
 				gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
 				gp.ui.gameFinished = true;
@@ -316,6 +330,7 @@ public class PlayerCharacter extends Entity{
 	public void contactMonster(int i) {
 		if(i != 999) {
 			if(invincible == false && gp.enem[i].dying == false) {
+				score -= gp.enem[i].attack*50;
 				life-= gp.enem[i].attack;
 				invincible = true;
 			}
@@ -329,6 +344,7 @@ public class PlayerCharacter extends Entity{
 				gp.enem[i].invincible = true;
 				
 				if(gp.enem[i].life <= 0) {
+					score += gp.enem[i].attack*50;
 					gp.enem[i].dying = true;
 				}
 			}
