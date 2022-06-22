@@ -1,0 +1,6 @@
+Opa professor, não entendi muito bem o que você pediu, então criei um jar executável com o main para poder jogar, 
+e outro sem pra fazer o import.
+
+Na classe GameD, quando vai dar o start, existem alguns trechos de código que mexem no frame, queria testar no console 
+pra ver se daria algum erro pra poder corrigir, mas acredito que não dê para fazer o teste com o .jar que você mandou. 
+Porém se você for ver no fonte, já existem os métodos para retornar as ativações e o número de jogadores diferentes. 
