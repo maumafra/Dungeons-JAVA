@@ -14,4 +14,13 @@ public class OBJ_ZoddHorn extends Entity{
 		down1 = setup("/objects/ZoddHorn", gp.tileSize, gp.tileSize);
 		type = typeConsumable;
 	}
+	
+	public boolean use (Entity entity) {
+		boolean picksItem = true;
+		gp.player.score += 5000;
+		gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
+		gp.ui.gameFinished = true;
+		gp.stopMusic();
+		return picksItem;
+	}
 }

@@ -68,6 +68,25 @@ public class Entity {
 		this.gp = gp;
 	}
 	
+	public boolean use(Entity entity) {
+		return true;
+	}
+
+	public void checkDrop() {
+		
+	}
+	
+	public void dropItem(Entity droppedItem) {
+		for(int i = 0; i<gp.obj.length; i++) {
+			if(gp.obj[i] == null) {
+				gp.obj[i] = droppedItem;
+				gp.obj[i].worldX = worldX;
+				gp.obj[i].worldY = worldY;
+				break;
+			}
+		}
+	}
+	
 	public void setAction() {
 		
 	}
@@ -126,7 +145,10 @@ public class Entity {
 	
 	public void damagePlayer(int attack) {
 		if(gp.player.invincible == false) {
-			gp.player.score -= attack*50;
+			gp.player.score -= attack*100;
+			if(gp.player.score < 0) {
+				gp.player.score = 0;
+			}
 			gp.player.life -= attack;
 			gp.player.invincible = true;
 		}
@@ -213,7 +235,7 @@ public class Entity {
 				dyingAnimation(g2);
 			}
 			
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, screenX, screenY, null);
 			
 			// CHARACTER BLINK AFTER TAKING DAMAGE
 			if(invincible == true) {
@@ -282,7 +304,7 @@ public class Entity {
 				dyingAnimation(g2);
 			}
 			
-			g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+			g2.drawImage(image, screenX, screenY, null);
 			
 			// CHARACTER BLINK AFTER TAKING DAMAGE
 			if(invincible == true) {

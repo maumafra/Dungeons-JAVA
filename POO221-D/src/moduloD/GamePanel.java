@@ -18,8 +18,12 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
+
+import gameShared.Console;
+import gameShared.Player;
 
 public class GamePanel extends JPanel implements Runnable{
 	
@@ -42,19 +46,25 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int worldHeight = tileSize * maxWorldRow;
 	
 	// FPS - Frames Per Second
-	int FPS = 60;
+	public int FPS = 60;
 	
 	//SYSTEM
-	TileManager tileM = new TileManager(this);
+	public TileManager tileM = new TileManager(this);
 	public KeyHandler keyH = new KeyHandler(this);
-	Sound music = new Sound();
-	Sound se = new Sound();
-	CollisionChecker cChecker = new CollisionChecker(this);
-	AssetSetter aSetter = new AssetSetter(this);
-	UI ui = new UI(this);
-	Config gameConfig = new Config(this);
-	Thread gameThread; //precisa do implements Runnable que gera o método Run
+	public Sound music = new Sound();
+	public Sound se = new Sound();
+	public CollisionChecker cChecker = new CollisionChecker(this);
+	public AssetSetter aSetter = new AssetSetter(this);
+	public UI ui = new UI(this);
+	public Config gameConfig = new Config(this);
+	public Thread gameThread; //precisa do implements Runnable que gera o método Run
 	public int activations;
+	public boolean sysHasAudio = true;
+	
+	//CONSOLE INTEGRATION
+	public Player actualPlayer;
+	public Console console;
+	public HashMap<String, Integer> players = new HashMap<>();
 	
 	//ENTITY AND OBJECT
 	public PlayerCharacter player = new PlayerCharacter(this, keyH);
@@ -73,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	
-	public GamePanel() {
+	public GamePanel(Player actualPlayer, Console console) {
 		
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -81,6 +91,8 @@ public class GamePanel extends JPanel implements Runnable{
 		this.addKeyListener(keyH); //vai escutar o evento da tecla e mandar pra nossa classe
 		this.setFocusable(true); //agora o panel está "focado" para receber o input
 		
+		this.actualPlayer = actualPlayer;
+		this.console = console;
 	}
 	
 	public void setupGame() {
@@ -150,6 +162,7 @@ public class GamePanel extends JPanel implements Runnable{
 						enem[i].update();
 					}
 					if(enem[i].alive == false) {
+						enem[i].checkDrop();
 						enem[i] = null;
 					}
 					
@@ -272,5 +285,11 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void incActivations() {
 		activations++;
+	}
+	
+	public void addPlayer(Player p1, int score) {
+		if(p1 != null) {
+			players.put(p1.getNickname(), score);
+		}
 	}
 }
