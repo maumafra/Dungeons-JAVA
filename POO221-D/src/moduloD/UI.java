@@ -123,6 +123,10 @@ public class UI {
 				g2.setColor(Color.yellow);
 				g2.drawString(text, x, y);
 				
+				if(gp.actualPlayer != null) {
+					gp.players.put(gp.actualPlayer.getNickname(), gp.player.score);
+				}
+				
 				gp.gameConfig.saveConfig();
 				gp.gameThread = null;
 			} else {
@@ -439,7 +443,7 @@ public class UI {
 		if(titleScreenState == 0) {
 			// TITLE NAME
 			g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-			String text = "DUNGEON";
+			String text = "DUNGEONS";
 			int x = getXCenterText(text);
 			int y = gp.screenHeight/2 - gp.tileSize*3;
 			//SHADOW

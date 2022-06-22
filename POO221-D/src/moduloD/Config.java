@@ -2,11 +2,17 @@ package moduloD;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 public class Config {
 	GamePanel gp;
@@ -16,15 +22,16 @@ public class Config {
 	}
 	
 	public void saveConfig() {
-		Path saveData = Path.of("gameConfig.txt");
+		Path saveDataTXT = Path.of("gameConfig.txt");
+		Path saveDataBIN = Path.of("gameConfig.bin");
 		
 		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter(saveData.toFile()));
+			BufferedWriter bw = new BufferedWriter(new FileWriter(saveDataTXT.toFile()));
 			
 			//Activation
 			bw.write(String.valueOf(gp.activations));
 			bw.newLine();
-			//Different Players
+			
 			//Music Volume
 			bw.write(String.valueOf(gp.music.volumeScale));
 			bw.newLine();
@@ -35,22 +42,27 @@ public class Config {
 			
 			bw.close();
 			
+			FileOutputStream fos = new FileOutputStream(saveDataBIN.toFile());
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			//HashMap players
+			oos.writeObject(gp.players);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void loadConfig() {
-		Path saveData = Path.of("gameConfig.txt");
+		Path saveDataTXT = Path.of("gameConfig.txt");
+		Path saveDataBIN = Path.of("gameConfig.bin");
 		
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(saveData.toFile()));
+			BufferedReader br = new BufferedReader(new FileReader(saveDataTXT.toFile()));
 			
 			//Activations
 			String s = br.readLine();
 			gp.activations = Integer.parseInt(s);
-			
-			//Different Players
 			
 			//Music volume
 			s = br.readLine();
@@ -62,9 +74,17 @@ public class Config {
 			
 			br.close();
 			
+			FileInputStream fis = new FileInputStream(saveDataBIN.toFile());
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			
+			//HashMap players
+			gp.players = (HashMap<String, Integer>) ois.readObject();
+			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

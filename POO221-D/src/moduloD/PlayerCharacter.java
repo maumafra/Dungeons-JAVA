@@ -203,6 +203,9 @@ public class PlayerCharacter extends Entity{
 		timeCounter++;
 		if(timeCounter>=60) {
 			score--;
+			if(score < 0) {
+				score = 0;
+			}
 			timeCounter = 0;
 		}
 		
@@ -280,39 +283,10 @@ public class PlayerCharacter extends Entity{
 	public void pickUpObject(int i) {
 		if(i != 999) {
 			
-			String objectName = gp.obj[i].name;
-			
-			switch(objectName) {
-			case"Behelit":
-				score += 1000;
-				hasBehelit++;
-				gp.playSE(1);
-				gp.obj[i] = null;
-				gp.ui.showMessage("You feel an evil presence watching you...");
-				break;
-			case "Boots":
-				if(hasBoots == false) {
-					score += 50;
-					speed += 1;
-					hasBoots = true;
+			if(gp.obj[i].type == typeConsumable) {
+				if(gp.obj[i].use(this)) {
 					gp.obj[i] = null;
-					gp.ui.showMessage("Speed Up!");
 				}
-				break;
-			case "ZoddHorn":
-				score += 5000;
-				gp.obj[i] = null;
-				gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
-				gp.ui.gameFinished = true;
-				gp.stopMusic();
-				//gp.playSE(1); TODO adicionar SE para completar o jogo
-				break;
-			case "Dropped Knife":
-				if(ammo < maxAmmo) {
-					gp.obj[i] = null;
-					ammo++;
-				}
-				break;
 			}
 		}
 	}
@@ -330,7 +304,10 @@ public class PlayerCharacter extends Entity{
 	public void contactMonster(int i) {
 		if(i != 999) {
 			if(invincible == false && gp.enem[i].dying == false) {
-				score -= gp.enem[i].attack*50;
+				score -= gp.enem[i].attack*100;
+				if(score < 0) {
+					score = 0;
+				}
 				life-= gp.enem[i].attack;
 				invincible = true;
 			}

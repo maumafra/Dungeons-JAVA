@@ -14,4 +14,16 @@ public class OBJ_Boots extends Entity{
 		down1 = setup("/objects/Boots", gp.tileSize, gp.tileSize);
 		type = typeConsumable;
 	}
+	
+	public boolean use (Entity entity) {
+		boolean picksItem = false;
+		if(gp.player.hasBoots == false) {
+			gp.player.score += 50;
+			gp.player.speed += 1;
+			gp.player.hasBoots = true;
+			gp.ui.showMessage("Speed Up!");
+			return true;
+		}
+		return picksItem;
+	}
 }

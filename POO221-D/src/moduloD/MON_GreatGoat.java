@@ -57,4 +57,18 @@ public class MON_GreatGoat extends Entity {
 			actionLockCounter = 0;
 		}
 	}
+	public void checkDrop() {
+		int i = new Random().nextInt(100)+1;
+		
+		//SET THE MONSTER DROP
+		if(i<25) {
+			dropItem(new OBJ_Boots(gp));
+		}
+		if(i>=50 && i<=60) {
+			dropItem(new  OBJ_KnifePickup(gp) );
+		}
+		if(i>95) {
+			dropItem(new OBJ_Behelit(gp));
+		}
+	}
 }

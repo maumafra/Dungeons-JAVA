@@ -57,4 +57,23 @@ public class MON_SlimeEye extends Entity{
 			actionLockCounter = 0;
 		}
 	}
+
+	public void checkDrop() {
+		int i = new Random().nextInt(100)+1;
+		
+		//SET THE MONSTER DROP
+		if(i<20) {
+			dropItem(new OBJ_KnifePickup(gp));
+		}
+		if(i>=50 && i<=55) {
+			dropItem(new OBJ_Boots(gp));
+		}
+		if(i>85) {
+			if(gp.player.life < gp.player.maxLife) {
+				//TODO dropShield
+			} else {
+				//TODO dropHeart
+			}
+		}
+	}
 }
