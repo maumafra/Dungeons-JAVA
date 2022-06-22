@@ -14,11 +14,13 @@ public class Sound {
 	FloatControl fc;
 	int volumeScale = 3;
 	float volume;
+	GamePanel gp;
 	
-	public Sound() {
+	public Sound(GamePanel gp) {
 		soundURL[0] = getClass().getResource("/sounds/Aria - 8bits.wav");
 		//https://www.youtube.com/watch?v=D_7f8TY5j2g
 		soundURL[1] = getClass().getResource("/sounds/BehelitSong.wav");
+		this.gp = gp;
 	}
 	
 	public void setFile(int i) {
@@ -28,7 +30,12 @@ public class Sound {
 			clip.open(ais);
 			fc = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 			checkVolume();
+		} catch (IllegalArgumentException e){
+			gp.sysHasAudio = false;
+		} catch (java.lang.NullPointerException e){
+			gp.sysHasAudio = false;
 		} catch (Exception e) {
+			gp.sysHasAudio = false;
 			e.printStackTrace();
 		}
 	}
