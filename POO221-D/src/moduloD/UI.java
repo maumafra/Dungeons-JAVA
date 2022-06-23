@@ -182,6 +182,69 @@ public class UI {
 			drawOptionsScreen();
 			
 		}
+		//GAME OVER STATE
+		if(gp.gameState == gp.gameOverState) {
+			
+		}
+		//GAME WIN STATE
+		if(gp.gameState == gp.gameWinState) {
+			drawWinState();
+		}
+	}
+	
+	public void drawWinState() {
+		g2.setColor(Color.yellow);
+		
+		String text;
+		int frameX = gp.tileSize/2;
+		int frameY = gp.tileSize;
+		int frameWidth = gp.tileSize*9 + gp.tileSize/2;
+		int frameHeight = gp.tileSize*8;
+		drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+		
+		int textX;
+		int textY;
+		
+		//MENSAGEM COM DESTAQUE
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 60F));
+		g2.setColor(Color.orange);
+		text = "Congratulations!";
+		textX = getXCenterText(text);
+		textY = frameY + (int)(gp.tileSize*1.5);
+		g2.drawString(text, textX + 1, textY + 1);
+		g2.setColor(Color.yellow);
+		g2.drawString(text, textX, textY);
+		
+		//MENSAGEM SEM DETAQUE
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+		g2.setColor(Color.white);
+		text = "You beat Nosferatu Zodd!";
+		textX = getXCenterText(text);
+		textY += (int)(gp.tileSize*1.5);
+		g2.drawString(text, textX, textY);
+		
+		//TEMPO
+		text = "Time: "+dFormat.format(playTime)+"s!";
+		textX = getXCenterText(text);
+		textY += gp.tileSize;;
+		g2.drawString(text, textX, textY);
+		
+		//MOSTRAR PONTUACAO
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
+		g2.setColor(Color.ORANGE);
+		text = "Score: "+gp.player.score+"!";
+		textX = getXCenterText(text);
+		textY += gp.tileSize;;
+		g2.drawString(text, textX + 1, textY + 1);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
+		g2.setColor(Color.yellow);
+		g2.drawString(text, textX, textY);
+		
+		if(gp.actualPlayer != null) {
+			gp.players.put(gp.actualPlayer.getNickname(), gp.player.score);
+		}
+		
+		gp.gameConfig.saveConfig();
 	}
 	
 	public void drawOptionsScreen() {

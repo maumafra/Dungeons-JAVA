@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		GameD game = new GameD(Console.getInstance());
+		GameD game = new GameD();
 		game.start(null);
 		
 		/*JFrame window = new JFrame();
