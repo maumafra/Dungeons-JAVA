@@ -9,9 +9,8 @@ import gameShared.Player;
 
 public class GameD implements Game{
 
-	private GamePanel gp;
-	private Player p1;
-	private Console con;
+	private GamePanel gp = new GamePanel();
+	private Console con = Console.getInstance();
 	
 	public GameD() {
 		this.con = Console.getInstance();
@@ -55,10 +54,6 @@ public class GameD implements Game{
 
 	@Override
 	public JPanel getPanel() {
-		if(this.gp == null) {
-			System.out.println("JPanel ainda n�o setado. Execute o start do jogo primeiro!");
-			return null;
-		}
 		return this.gp;
 	}
 
@@ -77,28 +72,26 @@ public class GameD implements Game{
 	@Override
 	public void start(Player arg0) {
 		
-		//TODO ver com o professor como vai funcionar isso daqui
+		/*//TODO ver com o professor como vai funcionar isso daqui
 		JFrame window = new JFrame();
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.setTitle("DUNGEONS");
 		
-		GamePanel gamePanel = new GamePanel(p1, con);
-		this.gp = gamePanel;
-		window.add(gamePanel);
+		window.add(gamePanel);*/
 		
-		gamePanel.gameConfig.loadConfig();
-		gamePanel.incActivations();
-		gamePanel.addPlayer(arg0, 0);
-		gamePanel.gameConfig.saveConfig();
+		this.gp.gameConfig.loadConfig();
+		this.gp.incActivations();
+		this.gp.addPlayerAndScore(arg0, 0);
+		this.gp.gameConfig.saveConfig();
 		
-		window.pack(); //window vai receber o tamanho de GamePanel
+		/*window.pack(); //window vai receber o tamanho de GamePanel
 		
 		window.setLocationRelativeTo(null);
-		window.setVisible(true);
+		window.setVisible(true);*/
 		
-		gamePanel.setupGame();
-		gamePanel.startGameThread();
+		this.gp.setupGame();
+		this.gp.startGameThread();
 		
 	}
 

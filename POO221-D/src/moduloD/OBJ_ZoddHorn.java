@@ -18,7 +18,10 @@ public class OBJ_ZoddHorn extends Entity{
 	public boolean use (Entity entity) {
 		boolean picksItem = true;
 		gp.player.score += 5000;
-		gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
+		if(gp.actualPlayer != null) {
+			gp.players.put(gp.actualPlayer.getNickname(), gp.player.score);
+		}
+		gp.gameConfig.saveConfig();
 		gp.gameState = gp.gameWinState;
 		gp.stopMusic();
 		return picksItem;

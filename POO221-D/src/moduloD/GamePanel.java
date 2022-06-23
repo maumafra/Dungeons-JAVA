@@ -1,11 +1,11 @@
-/* IMPORTANTE: Esse projeto se baseia em uma playlist de vï¿½deos postada na Youtube pelo canal
- * RyiSnow. Em seus vï¿½deos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
- * projeto. Nosso objetivo ao usar os vï¿½deos dele como fonte ï¿½ conseguir entender a lï¿½gica de
+/* IMPORTANTE: Esse projeto se baseia em uma playlist de vídeos postada na Youtube pelo canal
+ * RyiSnow. Em seus vídeos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
+ * projeto. Nosso objetivo ao usar os vídeos dele como fonte é conseguir entender a lógica de
  * funcionalidades como: leitura de comandos, implementar os "assets", movimento de cï¿½mera,
- * movimento sob um mapa, etc. para entï¿½o implementar ao nosso projeto, que terï¿½ seu prï¿½prio 
- * enredo, personagens, funcionalidades, cï¿½lculo de pontuaï¿½ï¿½o, inimigos etc.
+ * movimento sob um mapa, etc. para então implementar ao nosso projeto, que terá seu próprio 
+ * enredo, personagens, funcionalidades, cálculo de pontuação, inimigos etc.
  * 
- * REFERï¿½NCIA: How to Make a 2D Game in Java. RyiSnow. 
+ * REFERÊNCIA: How to Make a 2D Game in Java. RyiSnow. 
  * https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4
  */
 
@@ -13,6 +13,7 @@ package moduloD;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -85,16 +86,24 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	
 	
-	public GamePanel(Player actualPlayer, Console console) {
+	public GamePanel() {
 		
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH); //vai escutar o evento da tecla e mandar pra nossa classe
 		this.setFocusable(true); //agora o panel estï¿½ "focado" para receber o input
-		
-		this.actualPlayer = actualPlayer;
-		this.console = console;
+	}
+	
+	public void restartGame() {
+		player.setDefaultValues();
+		player.invincible = false;
+		ui.messageOn = false;
+		aSetter.setEnemies();
+		aSetter.setObject();
+		if(sysHasAudio == true) {
+			playMusic(0);
+		}
 	}
 	
 	public void setupGame() {
@@ -114,9 +123,9 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 	}
 	
-	/* Mï¿½todo run: vai definir em que frequï¿½ncia o loop de update e drawComponent vï¿½o ser executados,
+	/* Método run: vai definir em que frequência o loop de update e drawComponent vãoo ser executados,
 	 * nesse caso definimos 60 frames/s, e printamos o valor do FPS no console para ver o quanto que
-	 * ele alcanï¿½a a cada segundo.
+	 * ele alcança a cada segundo.
 	 */
 	@Override
 	public void run() {
@@ -139,10 +148,10 @@ public class GamePanel extends JPanel implements Runnable{
 			lastTime = currentTime;
 			
 			if(delta >= 1) {
-				// 1 atualiza as infrmaï¿½ï¿½es do jogo
+				// 1 atualiza as infrmações do jogo
 				update();
 				// 2 desenha os componentes na tela
-				repaint(); //para chamar o mï¿½todo paintComponent, ï¿½ necessï¿½rio chamar esse mï¿½todo
+				repaint(); //para chamar o método paintComponent, é necessário chamar esse método
 				delta--;
 				drawCount++;
 			}
@@ -259,10 +268,12 @@ public class GamePanel extends JPanel implements Runnable{
 			
 		}
 		//DEBUG
-		if(keyH.checkDrawTime == true && ui.gameFinished == false) {
+		if(keyH.checkDrawTime == true && gameState == playState) {
 			long drawEnd = System.nanoTime();
 			long passed = drawEnd - drawStart;
+			g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
 			g2.setColor(Color.white);
+			g2.drawString("FPS: "+FPS, tileSize*9 - tileSize/2, 50);
 			g2.drawString("Activations: "+activations, 10, 340);
 			g2.drawString("Draw Time: "+passed, 10, 360);
 			//System.out.println("Draw t: "+passed);
@@ -299,8 +310,9 @@ public class GamePanel extends JPanel implements Runnable{
 		activations++;
 	}
 	
-	public void addPlayer(Player p1, int score) {
+	public void addPlayerAndScore(Player p1, int score) {
 		if(p1 != null) {
+			this.actualPlayer = p1;
 			players.put(p1.getNickname(), score);
 		}
 	}

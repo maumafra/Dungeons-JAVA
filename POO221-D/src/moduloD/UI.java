@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class UI {
 
@@ -22,7 +23,6 @@ public class UI {
 	public boolean messageOn = false;
 	public String message = "";
 	int messageCounter = 0;
-	public boolean gameFinished = false;
 	public String currentDialogue = "";
 	public int commandNum = 0;
 	public int titleScreenState = 0;
@@ -66,6 +66,7 @@ public class UI {
 	public void showMessage(String text) {
 		message = text;
 		messageOn = true;
+		messageCounter = 0;
 	}
 	
 	public void draw (Graphics2D g2) {
@@ -82,61 +83,9 @@ public class UI {
 		
 		// PLAY STATE
 		if(gp.gameState == gp.playState) {
-			if (gameFinished == true) {
-				String text;
-				int x;
-				int y;
-				
-				//MENSAGEM SEM DETAQUE
-				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
-				g2.setColor(Color.white);
-				text = "You beat Nosferatu Zodd!";
-				x = getXCenterText(text);
-				y = gp.screenHeight/2 - (gp.tileSize*2);
-				g2.drawString(text, x, y);
-				
-				//TEMPO
-				text = "Time: "+dFormat.format(playTime)+"s!";
-				x = getXCenterText(text);
-				y = gp.screenHeight/2 - (gp.tileSize*1);
-				g2.drawString(text, x, y);
-				
-				//MENSAGEM COM DESTAQUE
-				g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60F));
-				g2.setColor(Color.BLACK);
-				text = "Congratulations!";
-				x = getXCenterText(text);
-				y = gp.screenHeight/2 - (gp.tileSize*3);
-				g2.drawString(text, x + 2, y + 2);
-				g2.setFont(g2.getFont().deriveFont(Font.BOLD, 60F));
-				g2.setColor(Color.yellow);
-				g2.drawString(text, x, y);
-				
-				//MOSTRAR PONTUACAO
-				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
-				g2.setColor(Color.ORANGE);
-				text = "Score: "+gp.player.score+"!";
-				x = getXCenterText(text);
-				y = gp.screenHeight/2;
-				g2.drawString(text, x + 1, y + 1);
-				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
-				g2.setColor(Color.yellow);
-				g2.drawString(text, x, y);
-				
-				if(gp.actualPlayer != null) {
-					gp.players.put(gp.actualPlayer.getNickname(), gp.player.score);
-				}
-				
-				gp.gameConfig.saveConfig();
-				gp.gameThread = null;
-			} else {
+			
 				drawPlayerLife();
 				drawPlayerAmmo();
-				
-				//FPS
-				g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 27F));
-				g2.setColor(Color.white);
-				g2.drawString("FPS: "+gp.FPS, gp.tileSize*9 - gp.tileSize/2, 50);
 				
 				//TIME
 				playTime += (double)1/60;
@@ -162,7 +111,7 @@ public class UI {
 						messageOn = false;
 					}
 				}
-			}
+			
 		}
 		//PAUSE STATE
 		if(gp.gameState == gp.pauseState) {
@@ -184,16 +133,71 @@ public class UI {
 		}
 		//GAME OVER STATE
 		if(gp.gameState == gp.gameOverState) {
-			
+			drawGameOverScreen();
 		}
 		//GAME WIN STATE
 		if(gp.gameState == gp.gameWinState) {
-			drawWinState();
+			drawWinScreen();
+		}
+	}
+	public void drawGameOverScreen() {
+		g2.setColor(new Color(0,0,0,150));
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+		
+		g2.setColor(new Color(0,0,0,180));
+		g2.fillRect(0, (int)(gp.tileSize*2.5), gp.screenWidth, gp.tileSize*2);
+		
+		int textX;
+		int textY;
+		String text;
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 90f));
+		
+		text = "YOU DIED";
+		
+		//SHADOW
+		g2.setColor(new Color(63,0,0));
+		textX = getXCenterText(text);
+		textY = gp.tileSize*4;
+		g2.drawString(text, textX+2, textY+2);
+		//TEXT
+		g2.setColor(new Color(120,0,0));
+		g2.drawString(text, textX, textY);
+		
+		//Retry
+		g2.setFont(g2.getFont().deriveFont(50f));
+		g2.setColor(new Color(0,0,0,180));
+		text = "Retry";
+		textX = getXCenterText(text);
+		textY += gp.tileSize*3;
+		g2.drawString(text, textX+1, textY+1);
+		g2.setColor(new Color(120,0,0));
+		g2.drawString(text, textX, textY);
+		if(commandNum == 0) {
+			g2.setColor(new Color(0,0,0,180));
+			g2.drawString(">", textX-38, textY+2);
+			g2.setColor(new Color(120,0,0));
+			g2.drawString(">", textX-40, textY);
+		}
+		
+		//Back to Menu
+		g2.setColor(new Color(0,0,0,180));
+		text = "Quit";
+		textX = getXCenterText(text);
+		textY += gp.tileSize*1.8;
+		g2.drawString(text, textX+1, textY+1);
+		g2.setColor(new Color(120,0,0));
+		g2.drawString(text, textX, textY);
+		if(commandNum == 1) {
+			g2.setColor(new Color(0,0,0,180));
+			g2.drawString(">", textX-38, textY+2);
+			g2.setColor(new Color(120,0,0));
+			g2.drawString(">", textX-40, textY);
 		}
 	}
 	
-	public void drawWinState() {
-		g2.setColor(Color.yellow);
+	public void drawWinScreen() {
+		g2.setColor(new Color(0,0,0,150));
+		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 		
 		String text;
 		int frameX = gp.tileSize/2;
@@ -226,7 +230,7 @@ public class UI {
 		//TEMPO
 		text = "Time: "+dFormat.format(playTime)+"s!";
 		textX = getXCenterText(text);
-		textY += gp.tileSize;;
+		textY += gp.tileSize;
 		g2.drawString(text, textX, textY);
 		
 		//MOSTRAR PONTUACAO
@@ -234,17 +238,43 @@ public class UI {
 		g2.setColor(Color.ORANGE);
 		text = "Score: "+gp.player.score+"!";
 		textX = getXCenterText(text);
-		textY += gp.tileSize;;
+		textY += gp.tileSize;
 		g2.drawString(text, textX + 1, textY + 1);
 		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 50F));
 		g2.setColor(Color.yellow);
 		g2.drawString(text, textX, textY);
 		
-		if(gp.actualPlayer != null) {
-			gp.players.put(gp.actualPlayer.getNickname(), gp.player.score);
+		//RETRY
+		g2.setFont(g2.getFont().deriveFont(40f));
+		g2.setColor(Color.GRAY);
+		text = "Retry";
+		textX = getXCenterText(text);
+		textY += gp.tileSize*1.5;
+		g2.drawString(text, textX+1, textY+1);
+		g2.setColor(Color.white);
+		g2.drawString(text, textX, textY);
+		if(commandNum == 0) {
+			g2.setColor(Color.GRAY);
+			g2.drawString(">", textX-39, textY+1);
+			g2.setColor(Color.white);
+			g2.drawString(">", textX-40, textY);
 		}
 		
-		gp.gameConfig.saveConfig();
+		//QUIT
+		g2.setColor(Color.GRAY);
+		text = "Quit";
+		textX = getXCenterText(text);
+		textY += gp.tileSize;
+		g2.drawString(text, textX+1, textY+1);
+		g2.setColor(Color.white);
+		g2.drawString(text, textX, textY);
+		if(commandNum == 1) {
+			g2.setColor(Color.GRAY);
+			g2.drawString(">", textX-39, textY+1);
+			g2.setColor(Color.white);
+			g2.drawString(">", textX-40, textY);
+		}
+		
 	}
 	
 	public void drawOptionsScreen() {
@@ -417,8 +447,10 @@ public class UI {
 			if(gp.keyH.enterPressed == true) {
 				optionsScreenState = 0;
 				gp.gameState = gp.titleState;
-				gp.music.stop();
-				gp.playMusic(0);
+				if(gp.sysHasAudio) {
+					gp.music.stop();
+				}
+				gp.restartGame();
 			}
 		}
 		//NO
@@ -613,7 +645,7 @@ public class UI {
 		g2.drawString(text, x, y);
 		
 	}	
-	
+		
 	public int getXCenterText(String text) {
 		int textLenght = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = gp.screenWidth/2 - textLenght/2;

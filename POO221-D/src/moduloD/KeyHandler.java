@@ -38,6 +38,39 @@ public class KeyHandler implements KeyListener{
 		else if(gp.gameState == gp.optionsState) {
 			optionsState(code);
 		}
+		//GAME OVER STATE
+		else if(gp.gameState == gp.gameOverState) {
+			gameOverState(code);
+		}
+		//GAME WIN STATE
+		else if(gp.gameState == gp.gameWinState) {
+			gameOverState(code);
+		}
+	}
+	
+	public void gameOverState(int code) {
+		if(code == KeyEvent.VK_W) {
+			gp.ui.commandNum--;
+			if(gp.ui.commandNum < 0) {
+				gp.ui.commandNum = 1;
+			}
+		}
+		if(code == KeyEvent.VK_S) {
+			gp.ui.commandNum++;
+			if(gp.ui.commandNum > 1) {
+				gp.ui.commandNum = 0;
+			}
+		}
+		if(code == KeyEvent.VK_ENTER) {
+			if(gp.ui.commandNum == 0) {
+				gp.gameState = gp.playState;
+				gp.restartGame();
+			}
+			else if (gp.ui.commandNum == 1) {
+				gp.gameState = gp.titleState;
+				gp.restartGame();
+			}
+		}
 	}
 	
 	public void optionsState(int code) {

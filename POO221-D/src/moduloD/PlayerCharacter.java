@@ -20,7 +20,7 @@ public class PlayerCharacter extends Entity{
 	public int score = 0;
 	
 	long timeCounter = 0;
-	int hasBehelit = 0;
+	boolean hasBehelit = false;
 	int standCounter = 0;
 	int attackNum = 1;
 	int attackCounter = 0;
@@ -62,6 +62,12 @@ public class PlayerCharacter extends Entity{
 		direction = "down";
 		
 		score = 600;
+		hasBehelit = false;
+		hasBoots = false;
+		bootCounter = 0;
+		timeCounter = 0;
+		invincibleCounter = 0;
+		shotAvailableCounter = 0;
 		
 		// PLAYER STATUS
 		maxLife = 6;
@@ -200,6 +206,7 @@ public class PlayerCharacter extends Entity{
 			}
 		}
 		
+		//A CADA SEGUNDO O PLAYER PERDE UM ITEM
 		timeCounter++;
 		if(timeCounter>=60) {
 			score--;
@@ -209,8 +216,24 @@ public class PlayerCharacter extends Entity{
 			timeCounter = 0;
 		}
 		
+		//DELAY PRA JOGAR A FACA
 		if(shotAvailableCounter < 30) {
 			shotAvailableCounter++;
+		}
+		
+		if(ammo > maxAmmo) {
+			ammo = maxAmmo;
+		}
+		
+		if(life > maxLife) {
+			life = maxLife;
+		}
+		//GAME OVER
+		if(life <= 0) {
+			if(gp.sysHasAudio) {
+				gp.stopMusic();
+			}
+			gp.gameState = gp.gameOverState;
 		}
 	}
 	

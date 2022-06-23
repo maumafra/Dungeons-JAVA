@@ -18,7 +18,7 @@ public class OBJ_Behelit extends Entity{
 	public boolean use (Entity entity) {
 		boolean picksItem = true;
 		gp.player.score += 1000;
-		gp.player.hasBehelit++;
+		gp.player.hasBehelit = true;
 		gp.playSE(1);
 		gp.ui.showMessage("You feel an evil presence watching you...");
 		return picksItem;

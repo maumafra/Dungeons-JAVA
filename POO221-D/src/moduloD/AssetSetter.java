@@ -16,6 +16,10 @@ public class AssetSetter {
 		gp.obj[1] = new OBJ_ZoddHorn(gp);
 		gp.obj[1].worldX = 27 * gp.tileSize;
 		gp.obj[1].worldY = 2 * gp.tileSize;
+		
+		gp.obj[2] = new OBJ_Boots(gp);
+		gp.obj[2].worldX = 16 * gp.tileSize;
+		gp.obj[2].worldY = 5 * gp.tileSize;
 	}
 	
 	public void setEnemies() {
