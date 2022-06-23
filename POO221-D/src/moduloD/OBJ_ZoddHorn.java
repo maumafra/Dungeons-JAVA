@@ -19,7 +19,7 @@ public class OBJ_ZoddHorn extends Entity{
 		boolean picksItem = true;
 		gp.player.score += 5000;
 		gp.ui.showMessage("Congratulations! You beat Nosferatu Zodd!");
-		gp.ui.gameFinished = true;
+		gp.gameState = gp.gameWinState;
 		gp.stopMusic();
 		return picksItem;
 	}

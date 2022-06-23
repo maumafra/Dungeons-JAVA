@@ -13,8 +13,8 @@ public class GameD implements Game{
 	private Player p1;
 	private Console con;
 	
-	public GameD(Console c) {
-		this.con = c;
+	public GameD() {
+		this.con = Console.getInstance();
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class GameD implements Game{
 	@Override
 	public JPanel getPanel() {
 		if(this.gp == null) {
-			System.out.println("JPanel ainda não setado. Execute o start do jogo primeiro!");
+			System.out.println("JPanel ainda nï¿½o setado. Execute o start do jogo primeiro!");
 			return null;
 		}
 		return this.gp;

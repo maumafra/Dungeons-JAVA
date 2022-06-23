@@ -1,11 +1,11 @@
-/* IMPORTANTE: Esse projeto se baseia em uma playlist de vídeos postada na Youtube pelo canal
- * RyiSnow. Em seus vídeos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
- * projeto. Nosso objetivo ao usar os vídeos dele como fonte é conseguir entender a lógica de
- * funcionalidades como: leitura de comandos, implementar os "assets", movimento de câmera,
- * movimento sob um mapa, etc. para então implementar ao nosso projeto, que terá seu próprio 
- * enredo, personagens, funcionalidades, cálculo de pontuação, inimigos etc.
+/* IMPORTANTE: Esse projeto se baseia em uma playlist de vï¿½deos postada na Youtube pelo canal
+ * RyiSnow. Em seus vï¿½deos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
+ * projeto. Nosso objetivo ao usar os vï¿½deos dele como fonte ï¿½ conseguir entender a lï¿½gica de
+ * funcionalidades como: leitura de comandos, implementar os "assets", movimento de cï¿½mera,
+ * movimento sob um mapa, etc. para entï¿½o implementar ao nosso projeto, que terï¿½ seu prï¿½prio 
+ * enredo, personagens, funcionalidades, cï¿½lculo de pontuaï¿½ï¿½o, inimigos etc.
  * 
- * REFERÊNCIA: How to Make a 2D Game in Java. RyiSnow. 
+ * REFERï¿½NCIA: How to Make a 2D Game in Java. RyiSnow. 
  * https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4
  */
 
@@ -27,12 +27,12 @@ import gameShared.Player;
 
 public class GamePanel extends JPanel implements Runnable{
 	
-	//CONFIGURAÇÕES DE TELA
-	final int tileSizeDefault = 16; // bloco de 16x16 pixels - padrão de tamanho 2D
+	//CONFIGURAï¿½ï¿½ES DE TELA
+	final int tileSizeDefault = 16; // bloco de 16x16 pixels - padrï¿½o de tamanho 2D
 	final int scale = 3; 
-	 //16x16 é muito pequeno pra resolução dos monitores atuais, por isso precisamos ampliar o
-	 //bloco padrão através de uma escala
-	final int tileSize = tileSizeDefault * scale; //tamanho do bloco real, após conversão
+	 //16x16 ï¿½ muito pequeno pra resoluï¿½ï¿½o dos monitores atuais, por isso precisamos ampliar o
+	 //bloco padrï¿½o atravï¿½s de uma escala
+	final int tileSize = tileSizeDefault * scale; //tamanho do bloco real, apï¿½s conversï¿½o
 	//resultado de bloco 48x48
 	final int maxScreenCol = 11; // 500/48 = 10.4
 	final int maxScreenRow = 10; // 480/48 = 10
@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable{
 	final int screenHeight = 480; //10*48 = 480
 	
 	// WORLD SETTINGS
-	public final int maxWorldCol = 29; //DEPENDE DO MAPA!! Nesse caso são as configurações do map01
+	public final int maxWorldCol = 29; //DEPENDE DO MAPA!! Nesse caso sï¿½o as configuraï¿½ï¿½es do map01
 	public final int maxWorldRow = 10;
 	public final int worldWidth = tileSize * maxWorldCol;
 	public final int worldHeight = tileSize * maxWorldRow;
@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public AssetSetter aSetter = new AssetSetter(this);
 	public UI ui = new UI(this);
 	public Config gameConfig = new Config(this);
-	public Thread gameThread; //precisa do implements Runnable que gera o método Run
+	public Thread gameThread; //precisa do implements Runnable que gera o mï¿½todo Run
 	public int activations;
 	public boolean sysHasAudio = true;
 	
@@ -80,6 +80,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int playState = 1;
 	public final int pauseState = 2;
 	public final int optionsState = 3;
+	public final int gameOverState = 4;
+	public final int gameWinState = 5;
 	
 	
 	
@@ -89,7 +91,7 @@ public class GamePanel extends JPanel implements Runnable{
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true);
 		this.addKeyListener(keyH); //vai escutar o evento da tecla e mandar pra nossa classe
-		this.setFocusable(true); //agora o panel está "focado" para receber o input
+		this.setFocusable(true); //agora o panel estï¿½ "focado" para receber o input
 		
 		this.actualPlayer = actualPlayer;
 		this.console = console;
@@ -112,9 +114,9 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 	}
 	
-	/* Método run: vai definir em que frequência o loop de update e drawComponent vão ser executados,
+	/* Mï¿½todo run: vai definir em que frequï¿½ncia o loop de update e drawComponent vï¿½o ser executados,
 	 * nesse caso definimos 60 frames/s, e printamos o valor do FPS no console para ver o quanto que
-	 * ele alcança a cada segundo.
+	 * ele alcanï¿½a a cada segundo.
 	 */
 	@Override
 	public void run() {
@@ -137,10 +139,10 @@ public class GamePanel extends JPanel implements Runnable{
 			lastTime = currentTime;
 			
 			if(delta >= 1) {
-				// 1 atualiza as infrmações do jogo
+				// 1 atualiza as infrmaï¿½ï¿½es do jogo
 				update();
 				// 2 desenha os componentes na tela
-				repaint(); //para chamar o método paintComponent, é necessário chamar esse método
+				repaint(); //para chamar o mï¿½todo paintComponent, ï¿½ necessï¿½rio chamar esse mï¿½todo
 				delta--;
 				drawCount++;
 			}
@@ -194,7 +196,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		Graphics2D g2 = (Graphics2D)g; //Subclasse de Graphics que dá mais controle ao usuário sobre elementos 2D
+		Graphics2D g2 = (Graphics2D)g; //Subclasse de Graphics que dï¿½ mais controle ao usuï¿½rio sobre elementos 2D
 		
 		//DEBUG
 		long drawStart = 0;
