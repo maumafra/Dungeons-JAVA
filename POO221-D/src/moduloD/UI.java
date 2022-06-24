@@ -16,17 +16,24 @@ public class UI {
 	GamePanel gp;
 	Graphics2D g2;
 	Font maruMonica;
-	BufferedImage emptyAchievement;
+	BufferedImage emptyAchievement, kills20Achievement, surv1MinAchievement, behelitAchievement;
 	BufferedImage sMarkImage1 , sMarkImage2, sMarkImage3, sMarkImage4;
 	BufferedImage fullHeart, emptyHeart, halfHeart;
 	BufferedImage knife;
-	public boolean messageOn = false;
+	public boolean messageOn = false, achievementOn = false;
 	public String message = "";
 	int messageCounter = 0;
 	public String currentDialogue = "";
 	public int commandNum = 0;
 	public int titleScreenState = 0;
 	public int optionsScreenState = 0;
+	
+	
+	//ACHIEVEMENTS
+	public int achIndex = 0;
+	int achievementCounter = 0;
+	int[] achCodes = new int[3];
+	String[] achText = new String[3];
 	
 	double playTime;
 	DecimalFormat dFormat = new DecimalFormat("#0.00");
@@ -60,6 +67,78 @@ public class UI {
 		emptyHeart = heart.image3;
 		Entity knifeIcon = new OBJ_Knife(gp);
 		knife = knifeIcon.up1;
+		
+		//TEST
+		OBJ_Achievement ach = new OBJ_Achievement20Enemies(gp);
+		kills20Achievement = ach.image;
+		achText[0] = ach.getName();
+		ach = new OBJ_AchievementSurvive1Minute(gp);
+		surv1MinAchievement = ach.image;
+		achText[1] = ach.getName();
+		ach = new OBJ_AchievementBehelit(gp);
+		behelitAchievement = ach.image;
+		achText[2] = ach.getName();
+		
+	}
+	
+	public void setShowAchievement(int achCode) {
+		achievementOn = true;
+		for(int i =0; i<achCodes.length; i++) {
+			if(achCodes[i] == 0) {
+				achCodes[i] = achCode;
+				break;
+			}
+		}
+	}
+	
+	private void achievementsHandler() {
+		if(achievementOn == true) {
+			if(achCodes[achIndex] == 0) {
+				return;
+			}
+			if(achCodes[achIndex] == 1) {
+				showAchievement(kills20Achievement, achText[0]);
+			}
+			if(achCodes[achIndex] == 2) {
+				showAchievement(surv1MinAchievement, achText[1]);
+			}
+			if(achCodes[achIndex] == 3) {
+				showAchievement(behelitAchievement, achText[2]);;
+			}
+		}
+	}
+	
+	private void showAchievement(BufferedImage icon, String text) {
+		int x = gp.tileSize*6 + 20;
+		int y = gp.tileSize/2;
+		int width = gp.tileSize*4 -20;
+		int height = (int) (gp.tileSize*1.12);
+		
+		Color c = new Color(0,0,0,240);
+		g2.setColor(c);
+		g2.fillRoundRect(x, y, width, height, 10, 10);
+		
+		g2.setColor(Color.orange);
+		g2.setStroke(new BasicStroke(1));
+		g2.drawRect(x+3, y+3, width-6, height-6);
+		
+		g2.drawImage(icon, x+3, y+3, null);
+		g2.setColor(new Color(170,68,225));
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20f));
+		g2.drawString(text, x +gp.tileSize +8, y +25);
+		g2.setColor(Color.white);
+		g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 11f));
+		g2.drawString("Achievement Unlocked!", x +gp.tileSize +8, y +40);
+		
+		achievementCounter++;
+		if(achievementCounter > 240) {
+			achievementCounter = 0;
+			achIndex++;
+			System.out.println(achIndex+"");
+			if(achIndex == 3) {
+				achievementOn = false;
+			}
+		}
 		
 	}
 	
@@ -111,6 +190,9 @@ public class UI {
 						messageOn = false;
 					}
 				}
+				
+				//ACHIEVEMENTS
+				achievementsHandler();
 			
 		}
 		//PAUSE STATE
@@ -140,6 +222,7 @@ public class UI {
 			drawWinScreen();
 		}
 	}
+	
 	public void drawGameOverScreen() {
 		g2.setColor(new Color(0,0,0,150));
 		g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);

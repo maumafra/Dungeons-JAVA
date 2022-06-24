@@ -21,6 +21,7 @@ public class OBJ_Behelit extends Entity{
 		gp.player.hasBehelit = true;
 		gp.playSE(1);
 		gp.ui.showMessage("You feel an evil presence watching you...");
+		gp.ui.setShowAchievement(3);
 		return picksItem;
 	}
 }
