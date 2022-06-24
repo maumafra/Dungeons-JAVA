@@ -13,13 +13,9 @@ public class AssetSetter {
 		gp.obj[0].worldX = 18 * gp.tileSize;
 		gp.obj[0].worldY = 3 * gp.tileSize;
 		
-		gp.obj[1] = new OBJ_ZoddHorn(gp);
-		gp.obj[1].worldX = 27 * gp.tileSize;
-		gp.obj[1].worldY = 2 * gp.tileSize;
-		
-		gp.obj[2] = new OBJ_Boots(gp);
-		gp.obj[2].worldX = 16 * gp.tileSize;
-		gp.obj[2].worldY = 5 * gp.tileSize;
+		gp.obj[1] = new OBJ_Boots(gp);
+		gp.obj[1].worldX = 16 * gp.tileSize;
+		gp.obj[1].worldY = 5 * gp.tileSize;
 	}
 	
 	public void setEnemies() {
@@ -66,5 +62,9 @@ public class AssetSetter {
 		gp.enem[10] = new MON_GreatGoat(gp);
 		gp.enem[10].worldX = 9 *gp.tileSize;
 		gp.enem[10].worldY = 4 *gp.tileSize;
+		
+		gp.enem[11] = new BOSS_Zodd(gp);
+		gp.enem[11].worldX = 19*gp.tileSize;
+		gp.enem[11].worldY = 4*gp.tileSize;
 	}
 }

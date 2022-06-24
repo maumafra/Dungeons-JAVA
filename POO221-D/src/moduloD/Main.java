@@ -7,23 +7,23 @@ import gameShared.Player;
 
 public class Main {
 	
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
 		
 		
-//		JFrame window = new JFrame();
-//		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		window.setResizable(false);
-//		window.setTitle("DUNGEONS");
-//		
-//		
-//		GameD game = new GameD();
-//		window.add(game.getPanel());
-//		
-//		window.pack(); //window vai receber o tamanho de GamePanel
-//		
-//		window.setLocationRelativeTo(null);
-//		window.setVisible(true);
-//		game.start(null);
+		JFrame window = new JFrame();
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setResizable(false);
+		window.setTitle("DUNGEONS");
+		
+		
+		GameD game = new GameD();
+		window.add(game.getPanel());
+		
+		window.pack(); //window vai receber o tamanho de GamePanel
+		
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
+		game.start(null);
 		
 		
 		/*JFrame window = new JFrame();
@@ -45,5 +45,5 @@ public class Main {
 		
 		gamePanel.setupGame();
 		gamePanel.startGameThread();*/
-//	}
+	}
 }

@@ -19,6 +19,7 @@ public class PlayerCharacter extends Entity{
 	
 	public int score = 0;
 	
+	long seconds = 0;
 	long timeCounter = 0;
 	boolean hasBehelit = false;
 	int standCounter = 0;
@@ -27,6 +28,8 @@ public class PlayerCharacter extends Entity{
 	//BOOTS
 	int bootCounter = 0;
 	boolean hasBoots;
+	
+	public int enemiesKilled = 0;
 	
 	public PlayerCharacter(GamePanel gp, KeyHandler keyH) {
 		
@@ -209,6 +212,10 @@ public class PlayerCharacter extends Entity{
 		//A CADA SEGUNDO O PLAYER PERDE UM ITEM
 		timeCounter++;
 		if(timeCounter>=60) {
+			seconds++;
+			if(seconds==60) {
+				gp.ui.setShowAchievement(2);
+			}
 			score--;
 			if(score < 0) {
 				score = 0;
@@ -288,7 +295,7 @@ public class PlayerCharacter extends Entity{
 			for (int i = 0; i<enemyIndex.length; i++) {
 				damageEnemy(enemyIndex[i], this.attack);
 			}
-			//damageEnemy(enemyIndex);
+			//damageEnemy(enemyIndex, this.attack);
 			
 			worldX = currentWorldX;
 			worldY = currentWorldY;
@@ -346,6 +353,12 @@ public class PlayerCharacter extends Entity{
 				if(gp.enem[i].life <= 0) {
 					score += gp.enem[i].attack*50;
 					gp.enem[i].dying = true;
+					enemiesKilled++;
+					System.out.println(enemiesKilled);
+					
+					if(enemiesKilled == 5) {
+						gp.ui.setShowAchievement(1);
+					}
 				}
 			}
 		}

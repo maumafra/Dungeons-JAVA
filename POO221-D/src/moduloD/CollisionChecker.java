@@ -192,6 +192,8 @@ public class CollisionChecker {
 				entity.solidArea.y = entity.solidAreaDefaultY;
 				target[i].solidArea.x = target[i].solidAreaDefaultX;
 				target[i].solidArea.y = target[i].solidAreaDefaultY;
+			} else {
+				index[i] = 999;
 			}
 		}
 		
