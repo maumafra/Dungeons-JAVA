@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import gameShared.Console;
+
 public class PlayerCharacter extends Entity{
 	
 	KeyHandler keyH;
@@ -33,9 +35,7 @@ public class PlayerCharacter extends Entity{
 	
 	public int enemiesKilled = 0;
 	
-	public boolean hasAchCode1 = false;
-	public boolean hasAchCode2 = false;
-	public boolean hasAchCode3 = false;
+	public Boolean[] hasAchies = {false, false, false};
 	
 	public PlayerCharacter(GamePanel gp, KeyHandler keyH) {
 		
@@ -53,7 +53,6 @@ public class PlayerCharacter extends Entity{
 		solidAreaDefaultY = solidArea.y;
 		solidArea.width = 32;
 		solidArea.height = 32;
-		
 		
 		setDefaultValues();
 		getPlayerImage();
@@ -119,7 +118,7 @@ public class PlayerCharacter extends Entity{
 			attacking();
 		} else if (keyH.upPressed == true || keyH.downPressed == true || keyH.rightPressed == true || keyH.leftPressed == true 
 				|| keyH.enterPressed == true) {
-			//atualização de movimento
+			//atualizaï¿½ï¿½o de movimento
 			if(keyH.upPressed == true) {
 				direction = "up";
 			} else if (keyH.downPressed == true) {
@@ -223,9 +222,15 @@ public class PlayerCharacter extends Entity{
 		timeCounter++;
 		if(timeCounter>=60) {
 			seconds++;
-			if(seconds==60 && hasAchCode2 == false) {
+			if(seconds==60 && hasAchies[1]  == false) {
 				gp.ui.setShowAchievement(2);
-				hasAchCode2 = true;
+				hasAchies[1] = true;
+				if(gp.actualPlayer != null) {
+					gp.pAchiev.put(gp.actualPlayer.getNickname(), hasAchies);
+					gp.gameConfig.saveAchievement();
+					Console c = Console.getInstance();
+					c.addAchievements(gp.actualPlayer, new OBJ_AchievementSurvive1Minute(gp));
+				}
 			}
 			score--;
 			if(score < 0) {
@@ -371,9 +376,16 @@ public class PlayerCharacter extends Entity{
 					enemiesKilled++;
 					System.out.println(enemiesKilled);
 					
-					if(enemiesKilled == 20 && hasAchCode1 == false) {
+					if(enemiesKilled == 20 && hasAchies[0] == false) {
 						gp.ui.setShowAchievement(1);
-						hasAchCode1 = true;
+						hasAchies[0] = true;
+						if(gp.actualPlayer != null) {
+							gp.pAchiev.put(gp.actualPlayer.getNickname(), hasAchies);
+							gp.gameConfig.saveAchievement();
+							Console c = Console.getInstance();
+							c.addAchievements(gp.actualPlayer, new OBJ_Achievement20Enemies(gp));
+						}
+						
 					}
 				}
 			}

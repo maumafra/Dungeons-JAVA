@@ -687,7 +687,7 @@ public class UI {
 			
 			BufferedImage achIcon;
 			
-			if(gp.player.hasAchCode1 == true) {
+			if(gp.player.hasAchies[0] == true) {
 				achIcon = kills20Achievement;
 			} else {
 				achIcon = emptyAchievement;
@@ -698,7 +698,7 @@ public class UI {
 			g2.drawImage(achIcon, x-79, y, gp.tileSize*2, gp.tileSize*2, null);
 			
 			
-			if(gp.player.hasAchCode3 == true) {
+			if(gp.player.hasAchies[2] == true) {
 				achIcon = behelitAchievement;
 			} else {
 				achIcon = emptyAchievement;
@@ -708,7 +708,7 @@ public class UI {
 			g2.drawRect(35, y, gp.tileSize*9, gp.tileSize*2);
 			g2.drawImage(achIcon, x-79, y, gp.tileSize*2, gp.tileSize*2, null);
 			
-			if(gp.player.hasAchCode2 == true) {
+			if(gp.player.hasAchies[1] == true) {
 				achIcon = surv1MinAchievement;
 			} else {
 				achIcon = emptyAchievement;

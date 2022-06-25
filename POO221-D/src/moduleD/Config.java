@@ -24,6 +24,7 @@ public class Config {
 	public void saveConfig() {
 		Path saveDataTXT = Path.of("gameConfig.txt");
 		Path saveDataBIN = Path.of("gameConfig.bin");
+		Path saveAchiBIN = Path.of("gameAchiev.bin");
 		
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(saveDataTXT.toFile()));
@@ -48,6 +49,14 @@ public class Config {
 			//HashMap players
 			oos.writeObject(gp.players);
 			
+			oos.close();
+			
+			fos = new FileOutputStream(saveAchiBIN.toFile());
+			oos = new ObjectOutputStream(fos);
+			
+			//HashMap achiev
+			oos.writeObject(gp.pAchiev);
+			oos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,6 +65,7 @@ public class Config {
 	public void loadConfig() {
 		Path saveDataTXT = Path.of("gameConfig.txt");
 		Path saveDataBIN = Path.of("gameConfig.bin");
+		Path saveAchiBIN = Path.of("gameAchiev.bin");
 		
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(saveDataTXT.toFile()));
@@ -80,6 +90,15 @@ public class Config {
 			//HashMap players
 			gp.players = (HashMap<String, Integer>) ois.readObject();
 			
+			ois.close();
+			
+			fis = new FileInputStream(saveAchiBIN.toFile());
+			ois = new ObjectInputStream(fis);
+			//HashMap achiev
+			gp.pAchiev = (HashMap<String, Boolean[]>) ois.readObject();
+			System.out.println("LOAD: "+gp.pAchiev);
+			
+			ois.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -88,4 +107,25 @@ public class Config {
 			e.printStackTrace();
 		}
 	}
+	
+	public void saveAchievement() {
+		Path saveAchiBIN = Path.of("gameAchiev.bin");
+		
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(saveAchiBIN.toFile());
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			System.out.println(gp.pAchiev);
+			//HashMap achiev
+			oos.writeObject(gp.pAchiev);
+			oos.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

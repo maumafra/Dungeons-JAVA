@@ -1,11 +1,11 @@
-/* IMPORTANTE: Esse projeto se baseia em uma playlist de vídeos postada na Youtube pelo canal
- * RyiSnow. Em seus vídeos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
- * projeto. Nosso objetivo ao usar os vídeos dele como fonte é conseguir entender a lógica de
+/* IMPORTANTE: Esse projeto se baseia em uma playlist de vï¿½deos postada na Youtube pelo canal
+ * RyiSnow. Em seus vï¿½deos, Ryi ensina as bases para criar um jogo 2D, enquanto ele faz seu
+ * projeto. Nosso objetivo ao usar os vï¿½deos dele como fonte ï¿½ conseguir entender a lï¿½gica de
  * funcionalidades como: leitura de comandos, implementar os "assets", movimento de cï¿½mera,
- * movimento sob um mapa, etc. para então implementar ao nosso projeto, que terá seu próprio 
- * enredo, personagens, funcionalidades, cálculo de pontuação, inimigos etc.
+ * movimento sob um mapa, etc. para entï¿½o implementar ao nosso projeto, que terï¿½ seu prï¿½prio 
+ * enredo, personagens, funcionalidades, cï¿½lculo de pontuaï¿½ï¿½o, inimigos etc.
  * 
- * REFERÊNCIA: How to Make a 2D Game in Java. RyiSnow. 
+ * REFERï¿½NCIA: How to Make a 2D Game in Java. RyiSnow. 
  * https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4
  */
 
@@ -66,7 +66,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public Player actualPlayer;
 	public Console console;
 	public HashMap<String, Integer> players = new HashMap<>();
-	public HashMap<String, Integer[]> pAchiev = new HashMap<>();
+	public HashMap<String, Boolean[]> pAchiev = new HashMap<>();
 	
 	//ENTITY AND OBJECT
 	public PlayerCharacter player = new PlayerCharacter(this, keyH);
@@ -121,6 +121,10 @@ public class GamePanel extends JPanel implements Runnable{
 		} catch(NullPointerException e) {
 			sysHasAudio = false;
 		}
+		if(actualPlayer != null) {
+			System.out.println("TESTE!!!!!!!!"+pAchiev.get(actualPlayer.getNickname()));
+			player.hasAchies = pAchiev.get(actualPlayer.getNickname());
+		}
 		
 		gameState = titleState;
 	}
@@ -130,9 +134,9 @@ public class GamePanel extends JPanel implements Runnable{
 		gameThread.start();
 	}
 	
-	/* Método run: vai definir em que frequência o loop de update e drawComponent vãoo ser executados,
+	/* Mï¿½todo run: vai definir em que frequï¿½ncia o loop de update e drawComponent vï¿½oo ser executados,
 	 * nesse caso definimos 60 frames/s, e printamos o valor do FPS no console para ver o quanto que
-	 * ele alcança a cada segundo.
+	 * ele alcanï¿½a a cada segundo.
 	 */
 	@Override
 	public void run() {
@@ -155,10 +159,10 @@ public class GamePanel extends JPanel implements Runnable{
 			lastTime = currentTime;
 			
 			if(delta >= 1) {
-				// 1 atualiza as infrmações do jogo
+				// 1 atualiza as infrmaï¿½ï¿½es do jogo
 				update();
 				// 2 desenha os componentes na tela
-				repaint(); //para chamar o método paintComponent, é necessário chamar esse método
+				repaint(); //para chamar o mï¿½todo paintComponent, ï¿½ necessï¿½rio chamar esse mï¿½todo
 				delta--;
 				drawCount++;
 			}

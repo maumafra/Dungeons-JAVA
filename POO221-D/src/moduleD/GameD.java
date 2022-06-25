@@ -24,7 +24,6 @@ public class GameD implements Game{
 
 	@Override
 	public Player getBestPlayer() {
-		
 		return null;
 	}
 
