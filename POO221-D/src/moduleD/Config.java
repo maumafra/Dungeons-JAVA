@@ -14,6 +14,8 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import gameShared.Player;
+
 public class Config {
 	GamePanel gp;
 	
@@ -48,6 +50,13 @@ public class Config {
 			
 			//HashMap players
 			oos.writeObject(gp.players);
+			
+			//BEST PLAYER AND SCORE
+			oos.writeObject(gp.bestPlayer);
+			oos.writeInt(gp.bestPScore);
+			//WORST PLAYER AND SCORE
+			oos.writeObject(gp.worstPlayer);
+			oos.writeInt(gp.worstPScore);
 			
 			oos.close();
 			
@@ -90,13 +99,21 @@ public class Config {
 			//HashMap players
 			gp.players = (HashMap<String, Integer>) ois.readObject();
 			
+			//BEST PLAYER AND SCORE
+			gp.bestPlayer = (Player) ois.readObject();
+			gp.bestPScore = ois.readInt();
+			
+			//WORST PLAYER AND SCORE
+			gp.worstPlayer = (Player) ois.readObject();
+			gp.worstPScore = ois.readInt();
+			
 			ois.close();
 			
 			fis = new FileInputStream(saveAchiBIN.toFile());
 			ois = new ObjectInputStream(fis);
 			//HashMap achiev
 			gp.pAchiev = (HashMap<String, Boolean[]>) ois.readObject();
-			System.out.println("LOAD: "+gp.pAchiev);
+			System.out.println("LOAD: "+gp.pAchiev.toString());
 			
 			ois.close();
 		} catch (FileNotFoundException e) {
@@ -115,7 +132,7 @@ public class Config {
 		try {
 			fos = new FileOutputStream(saveAchiBIN.toFile());
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			System.out.println(gp.pAchiev);
+			System.out.println(gp.pAchiev.toString());
 			//HashMap achiev
 			oos.writeObject(gp.pAchiev);
 			oos.close();

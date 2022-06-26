@@ -24,19 +24,21 @@ public class GameD implements Game{
 
 	@Override
 	public Player getBestPlayer() {
-		return null;
+		return gp.bestPlayer;
 	}
 
 	@Override
 	public int getBestPlayerPoints() {
 		
-		return 0;
+		return gp.bestPScore;
 	}
 
 	@Override
 	public String getDescription() {
 		
-		return null;
+		return "The legendary captain of the mercenary group Band of the Hawk enters the dungeon seeking for his vengeance. "
+				+ "Now, inside de monsters' nest, he will have to survive hordes of enemies trying to find a way to call "
+				+ "the God's Hand and fulfill his revenge.";
 	}
 
 	@Override
@@ -59,13 +61,13 @@ public class GameD implements Game{
 	@Override
 	public Player getWorstPlayer() {
 		
-		return null;
+		return gp.worstPlayer;
 	}
 
 	@Override
 	public int getWorstPlayerPoints() {
 		
-		return 0;
+		return gp.worstPScore;
 	}
 
 	@Override
@@ -79,6 +81,7 @@ public class GameD implements Game{
 		
 		window.add(gamePanel);*/
 		
+		//System.out.println(this.gp.player.hasAchies.toString());
 		this.gp.gameConfig.loadConfig();
 		this.gp.incActivations();
 		this.gp.addPlayerAndScore(arg0, 0);
@@ -91,6 +94,11 @@ public class GameD implements Game{
 		
 		this.gp.setupGame();
 		this.gp.startGameThread();
+		
+		if(gp.bestPlayer != null) {
+			System.out.println("BEST: "+gp.bestPlayer.getNickname()+": "+gp.bestPScore+
+					   "\nWORST: "+gp.worstPlayer.getNickname()+": "+gp.worstPScore);
+		}
 		
 	}
 

@@ -67,6 +67,10 @@ public class GamePanel extends JPanel implements Runnable{
 	public Console console;
 	public HashMap<String, Integer> players = new HashMap<>();
 	public HashMap<String, Boolean[]> pAchiev = new HashMap<>();
+	public Player bestPlayer = null;
+	public int bestPScore = 0;
+	public Player worstPlayer = null;
+	public int worstPScore = 0;
 	
 	//ENTITY AND OBJECT
 	public PlayerCharacter player = new PlayerCharacter(this, keyH);
@@ -122,8 +126,10 @@ public class GamePanel extends JPanel implements Runnable{
 			sysHasAudio = false;
 		}
 		if(actualPlayer != null) {
-			System.out.println("TESTE!!!!!!!!"+pAchiev.get(actualPlayer.getNickname()));
-			player.hasAchies = pAchiev.get(actualPlayer.getNickname());
+			System.out.println("Setup Game: "+pAchiev.get(actualPlayer.getNickname()));
+			if(pAchiev.containsKey(actualPlayer.getNickname())) {
+				player.hasAchies = pAchiev.get(actualPlayer.getNickname());
+			}
 		}
 		
 		gameState = titleState;
@@ -327,6 +333,14 @@ public class GamePanel extends JPanel implements Runnable{
 			System.out.println("Player: "+p1.getNickname());
 			players.put(p1.getNickname(), score);
 			System.out.println(players);
+			if(bestPlayer == null) {
+				bestPlayer = p1;
+				bestPScore = 0;
+			}
+			if(worstPlayer == null) {
+				worstPlayer = p1;
+				worstPScore = 0;
+			}
 
 		}
 	}
