@@ -8,7 +8,8 @@ public class BOSS_Zodd extends Entity{
 		super(gp);
 		type = 2;
 		name = "Zodd";
-		speed = 1;
+		defaultSpeed = 1;
+		speed = defaultSpeed;
 		maxLife = 50;
 		life = maxLife;
 		
