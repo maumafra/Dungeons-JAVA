@@ -9,7 +9,8 @@ public class MON_SlimeEye extends Entity{
 		
 		type = 2;
 		name = "Eyed Slime";
-		speed = 1;
+		defaultSpeed = 1;
+		speed = defaultSpeed;
 		maxLife = 5;
 		life = maxLife;
 		

@@ -66,7 +66,8 @@ public class PlayerCharacter extends Entity{
 	public void setDefaultValues() {
 		worldX = gp.tileSize * 14; //coordenada do mapa
 		worldY = gp.tileSize * 4; //coordenada do mapa
-		speed = 4;
+		defaultSpeed = 4;
+		speed = defaultSpeed;
 		direction = "down";
 		
 		score = 50;
@@ -367,6 +368,9 @@ public class PlayerCharacter extends Entity{
 	public void damageEnemy(int i, int attack) {
 		if(i != 999) {
 			if(gp.enem[i] != null && gp.enem[i].invincible == false ) {
+				
+				knockBack(gp.enem[i]);
+				
 				gp.enem[i].life -= attack;
 				gp.enem[i].invincible = true;
 				
@@ -529,4 +533,13 @@ public class PlayerCharacter extends Entity{
 		}	
 			
 	}
+
+	public void knockBack (Entity entity) {
+		if(!entity.name.equals("Zodd")) {
+			entity.direction = direction;
+			entity.speed += 10;
+			entity.knockBack = true;
+		}
+	}
+	
 }

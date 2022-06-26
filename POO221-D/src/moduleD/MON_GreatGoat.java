@@ -9,7 +9,8 @@ public class MON_GreatGoat extends Entity {
 		
 		type = 2;
 		name = "Great Goat";
-		speed = 2;
+		defaultSpeed = 2;
+		speed = defaultSpeed;
 		maxLife = 10;
 		life = maxLife;
 		
