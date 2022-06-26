@@ -35,6 +35,7 @@ public class Entity {
 	public boolean attacking = false;
 	public boolean alive = true;
 	public boolean dying = false;
+	public boolean onPath = false;
 	
 	//COUNTER
 	public int actionLockCounter = 0;
@@ -91,19 +92,23 @@ public class Entity {
 		
 	}
 	
-	public void update() {
-		setAction(); //incluir IA caso queira botar NPC
-		
+	public void checkCollision() {
 		collisionOn = false;
 		
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
-		gp.cChecker.checkEntity(this, gp.enem);
+		//gp.cChecker.checkEntity(this, gp.enem);
 		contactPlayer = gp.cChecker.checkPlayer(this);
 		
 		if(contactPlayer == true && this.type == typeEnemy) {
 			damagePlayer(attack);
 		}
+	}
+	
+	public void update() {
+		setAction(); //incluir IA caso queira botar NPC
+		
+		checkCollision();
 		
 		if(collisionOn == false){
 			switch(direction) {
@@ -140,6 +145,10 @@ public class Entity {
 				invincible = false;
 				invincibleCounter = 0;
 			}
+		}
+		
+		if(type == typeEnemy) {
+			onPath = true;
 		}
 	}
 	
@@ -363,5 +372,72 @@ public class Entity {
 			e.printStackTrace();
 		}
 		return image;
+	}
+	
+	public void searchPath(int goalCol, int goalRow) {
+		int startCol = (worldX + solidArea.x)/gp.tileSize;
+		int startRow = (worldY + solidArea.y)/gp.tileSize;
+		
+		gp.pFinder.setNodes(startCol, startRow, goalCol, goalRow);
+		
+		if(gp.pFinder.search() == true) {
+			int nextX = gp.pFinder.pathList.get(0).col * gp.tileSize;
+			int nextY = gp.pFinder.pathList.get(0).row * gp.tileSize;
+			
+			int enLeftX = worldX + solidArea.x;
+			int enRightX = worldX + solidArea.x + solidArea.width;
+			int enTopY = worldY + solidArea.y;
+			int enBottomY = worldY + solidArea.y + solidArea.height;
+			
+			if(enTopY > nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+				direction = "up";
+			}
+			else if(enTopY < nextY && enLeftX >= nextX && enRightX < nextX + gp.tileSize) {
+				direction = "down";
+			}
+			else if(enTopY >= nextY && enBottomY < nextY + gp.tileSize) {
+				if(enLeftX > nextX) {
+					direction = "left";
+				}
+				if(enLeftX < nextX) {
+					direction = "right";
+				}
+			}
+			else if (enTopY > nextY && enLeftX > nextX) {
+				direction = "up";
+				checkCollision();
+				if(collisionOn == true) {
+					direction = "left";
+				}
+			}
+			else if (enTopY > nextY && enLeftX < nextX) {
+				direction = "up";
+				checkCollision();
+				if(collisionOn == true) {
+					direction = "right";
+				}
+			}
+			else if(enTopY < nextY && enLeftX > nextX) {
+				direction = "down";
+				checkCollision();
+				if(collisionOn == true) {
+					direction = "left";
+				}
+			}
+			else if(enTopY < nextY && enLeftX < nextX) {
+				direction = "down";
+				checkCollision();
+				if(collisionOn == true) {
+					direction = "right";
+				}
+			}
+			
+			int nextCol = gp.pFinder.pathList.get(0).col;
+			int nextRow = gp.pFinder.pathList.get(0).row;
+			
+			if(nextCol == goalCol && nextRow == goalRow) {
+				onPath = false;
+			}
+		}
 	}
 }

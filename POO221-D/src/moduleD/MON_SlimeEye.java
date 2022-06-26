@@ -21,7 +21,6 @@ public class MON_SlimeEye extends Entity{
 		solidAreaDefaultY = solidArea.y;
 		
 		attack = 1;
-		
 		getImage();
 	}
 	public void getImage() {
@@ -36,25 +35,32 @@ public class MON_SlimeEye extends Entity{
 		right2 = setup("/enemies/SlimeEye2", gp.tileSize, gp.tileSize);
 	}
 	public void setAction() {
-		actionLockCounter ++;
-		
-		if(actionLockCounter == 120) {
-			random = new Random();
-			int i = random.nextInt(100)+1;//pra não contar o 0
+		if(onPath == true) {
+			int goalCol = (gp.player.worldX + gp.player.solidArea.x)/gp.tileSize;
+			int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
 			
-			if(i <=25) {
-				direction = "up";
+			searchPath(goalCol, goalRow);
+		} else {
+			actionLockCounter ++;
+			
+			if(actionLockCounter == 120) {
+				random = new Random();
+				int i = random.nextInt(100)+1;//pra não contar o 0
+				
+				if(i <=25) {
+					direction = "up";
+				}
+				if(i > 25 && i <=50) {
+					direction = "down";
+				}
+				if(i > 50 && i <=75) {
+					direction = "left";
+				}
+				if(i > 75 && i <= 100) {
+					direction = "right";
+				}
+				actionLockCounter = 0;
 			}
-			if(i > 25 && i <=50) {
-				direction = "down";
-			}
-			if(i > 50 && i <=75) {
-				direction = "left";
-			}
-			if(i > 75 && i <= 100) {
-				direction = "right";
-			}
-			actionLockCounter = 0;
 		}
 	}
 

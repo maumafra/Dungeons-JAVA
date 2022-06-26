@@ -58,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public AssetSetter aSetter = new AssetSetter(this);
 	public UI ui = new UI(this);
 	public Config gameConfig = new Config(this);
+	public PathFinder pFinder = new PathFinder(this);
 	public Thread gameThread; //precisa do implements Runnable que gera o m�todo Run
 	public int activations;
 	public boolean sysHasAudio = true;
