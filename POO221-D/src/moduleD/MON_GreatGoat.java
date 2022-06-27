@@ -14,9 +14,9 @@ public class MON_GreatGoat extends Entity {
 		maxLife = 10;
 		life = maxLife;
 		
-		solidArea.x = 3;
+		solidArea.x = 8;
 		solidArea.y = 13;
-		solidArea.width = 42;
+		solidArea.width = 38;
 		solidArea.height = 32;
 		solidAreaDefaultX = solidArea.x;
 		solidAreaDefaultY = solidArea.y;
@@ -72,10 +72,21 @@ public class MON_GreatGoat extends Entity {
 		if(i<25) {
 			dropItem(new OBJ_Boots(gp));
 		}
-		if(i>=50 && i<=60) {
+		if(i>=25 && i <50 && gp.player.life < gp.player.maxLife) {
+			if (i < 35) {
+				dropItem(new OBJ_HalfHeartPickUp(gp));
+			}
+			else {
+				dropItem(new OBJ_FullHeartPickUp(gp));
+			}
+		}
+		if(i>=50 && i<=60 && gp.player.ammo < gp.player.maxAmmo) {
 			dropItem(new  OBJ_KnifePickup(gp) );
 		}
-		if(i>95 && gp.player.enemiesKilled >= 100) {
+		if(i>60 && i<=75) {
+			dropItem(new OBJ_ShieldPickUp(gp));
+		}
+		if(i>90 && gp.player.enemiesKilled >= 20 && gp.hasDroppedBehelit == false) {
 			dropItem(new OBJ_Behelit(gp));
 		}
 	}

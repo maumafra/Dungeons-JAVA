@@ -82,7 +82,14 @@ public class Entity {
 	
 	public void dropItem(Entity droppedItem) {
 		for(int i = 0; i<gp.obj.length; i++) {
-			if(gp.obj[i] == null) {
+			if(droppedItem.name.equals("ZoddHorn") || droppedItem.name.equals("Behelit")) {
+				System.out.println("DROPPED ESPECIAL: "+droppedItem.name);
+				gp.obj[0] = droppedItem;
+				gp.obj[0].worldX = worldX;
+				gp.obj[0].worldY = worldY;
+			}
+			else if(gp.obj[i] == null) {
+				System.out.println("DROPPED: "+droppedItem.name);
 				gp.obj[i] = droppedItem;
 				gp.obj[i].worldX = worldX;
 				gp.obj[i].worldY = worldY;

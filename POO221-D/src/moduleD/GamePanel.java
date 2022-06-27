@@ -62,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public Thread gameThread; //precisa do implements Runnable que gera o m�todo Run
 	public int activations;
 	public boolean sysHasAudio = true;
+	public boolean hasDroppedBehelit = false;
 	
 	//CONSOLE INTEGRATION
 	public Player actualPlayer;
@@ -80,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public Entity enem[] = new Entity[30];
 	public ArrayList<Entity> projectileList = new ArrayList<>();
 	public ArrayList<Entity> entityList = new ArrayList<>(); //arraylist para dar prioridade de desenho para a entidade de maior y
+	public int respawnCounter = 0;
 	
 	// GAME STATE
 	public int gameState;
@@ -103,10 +105,19 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	public void restartGame() {
 		player.setDefaultValues();
+		respawnCounter = 0;
+		player.hasBehelit = false;
+		hasDroppedBehelit = false;
 		ui.messageOn = false;
 		ui.messageCounter = 0;
 		for(int i = 0; i < ui.achCodes.length; i++) {
 			ui.achCodes[i] = 0;
+		}
+		for(int i = 0; i<enem.length; i++) {
+			enem[i] = null;
+		}
+		for(int i = 0; i<obj.length; i++) {
+			obj[i] = null;
 		}
 		ui.achievementCounter = 0;
 		ui.achIndex = 0;
@@ -121,6 +132,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public void setupGame() {
 		aSetter.setObject();
 		aSetter.setEnemies();
+		respawnCounter = 0;
 		try {
 			playMusic(0);
 		} catch(NullPointerException e) {
@@ -175,8 +187,8 @@ public class GamePanel extends JPanel implements Runnable{
 			}
 			
 			if(timer >= 1000000000) {
-				System.out.println("FPS: "+drawCount);
-				System.out.println(activations);
+				System.out.println("fps: "+drawCount);
+				//System.out.println("activations: "+activations);
 				drawCount = 0;
 				timer = 0;
 			}
@@ -187,6 +199,12 @@ public class GamePanel extends JPanel implements Runnable{
 		if(gameState == playState) {
 			//PLAYER
 			player.update();
+			
+			respawnCounter++;
+			if(respawnCounter > 600) {
+				aSetter.respawnEnemies();
+				respawnCounter = 0;
+			}
 			
 			//ENEMIES
 			for(int i = 0; i < enem.length; i++) {

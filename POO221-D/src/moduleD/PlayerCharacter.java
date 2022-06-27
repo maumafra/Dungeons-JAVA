@@ -378,7 +378,7 @@ public class PlayerCharacter extends Entity{
 					score += gp.enem[i].attack*5;
 					gp.enem[i].dying = true;
 					enemiesKilled++;
-					System.out.println(enemiesKilled);
+					System.out.println("ENEMIES KILLED: "+enemiesKilled);
 					
 					if(enemiesKilled == 20 && hasAchies[0] == false) {
 						gp.ui.setShowAchievement(1);
