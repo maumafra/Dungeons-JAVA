@@ -15,6 +15,7 @@ public class OBJ_Behelit extends Entity{
 		name = "Behelit";
 		down1 = setup("/objects/Behelit", gp.tileSize, gp.tileSize);
 		type = typeConsumable;
+		gp.hasDroppedBehelit = true;
 	}
 	
 	public boolean use (Entity entity) {
@@ -23,6 +24,10 @@ public class OBJ_Behelit extends Entity{
 		gp.player.hasBehelit = true;
 		gp.playSE(1);
 		gp.ui.showMessage("You feel an evil presence watching you...");
+		gp.enem[0] = new BOSS_Zodd(gp);
+		gp.enem[0].worldX = 20 * gp.tileSize;
+		gp.enem[0].worldY = 5 * gp.tileSize;
+		
 		if(gp.player.hasAchies[2] == false) {
 			gp.ui.setShowAchievement(3);
 			gp.player.hasAchies[2] = true;

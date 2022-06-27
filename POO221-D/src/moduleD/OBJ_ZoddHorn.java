@@ -25,6 +25,9 @@ public class OBJ_ZoddHorn extends Entity{
 			System.out.println("Player: "+gp.actualPlayer.getNickname()+" - Score:"+gp.player.score);
 			Console c = Console.getInstance();
 			//c.addPlayer(gp.actualPlayer);
+			if(gp.player.score > 1000) {
+				gp.player.score = 1000;
+			}
 			c.addPoints(gp.actualPlayer, gp.player.score);
 			System.out.println(c.getRanking());
 			

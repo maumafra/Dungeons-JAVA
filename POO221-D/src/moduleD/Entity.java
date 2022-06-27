@@ -82,7 +82,14 @@ public class Entity {
 	
 	public void dropItem(Entity droppedItem) {
 		for(int i = 0; i<gp.obj.length; i++) {
-			if(gp.obj[i] == null) {
+			if(droppedItem.name.equals("ZoddHorn") || droppedItem.name.equals("Behelit")) {
+				System.out.println("DROPPED ESPECIAL: "+droppedItem.name);
+				gp.obj[0] = droppedItem;
+				gp.obj[0].worldX = worldX;
+				gp.obj[0].worldY = worldY;
+			}
+			else if(gp.obj[i] == null) {
+				System.out.println("DROPPED: "+droppedItem.name);
 				gp.obj[i] = droppedItem;
 				gp.obj[i].worldX = worldX;
 				gp.obj[i].worldY = worldY;
@@ -100,7 +107,15 @@ public class Entity {
 		
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
-		//gp.cChecker.checkEntity(this, gp.enem);
+		
+		int saW = solidArea.width;
+		int saH = solidArea.height;
+		solidArea.width = 10;
+		solidArea.height = 10;
+		gp.cChecker.checkEntity(this, gp.enem);
+		solidArea.width = saW;
+		solidArea.height = saH;
+		
 		contactPlayer = gp.cChecker.checkPlayer(this);
 		
 		if(contactPlayer == true && this.type == typeEnemy) {

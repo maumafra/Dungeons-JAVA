@@ -98,13 +98,13 @@ public class UI {
 			if(achCodes[achIndex] == 0) {
 				return;
 			}
-			if(achCodes[achIndex] == 1) {
+			else if(achCodes[achIndex] == 1) {
 				showAchievement(kills20Achievement, achText[0]);
 			}
-			if(achCodes[achIndex] == 2) {
+			else if(achCodes[achIndex] == 2) {
 				showAchievement(surv1MinAchievement, achText[1]);
 			}
-			if(achCodes[achIndex] == 3) {
+			else if(achCodes[achIndex] == 3) {
 				showAchievement(behelitAchievement, achText[2]);;
 			}
 		}
