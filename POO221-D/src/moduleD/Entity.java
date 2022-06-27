@@ -107,15 +107,7 @@ public class Entity {
 		
 		gp.cChecker.checkTile(this);
 		gp.cChecker.checkObject(this, false);
-		
-		int saW = solidArea.width;
-		int saH = solidArea.height;
-		solidArea.width = 10;
-		solidArea.height = 10;
-		gp.cChecker.checkEntity(this, gp.enem);
-		solidArea.width = saW;
-		solidArea.height = saH;
-		
+		//gp.cChecker.checkEntity(this, gp.enem);
 		contactPlayer = gp.cChecker.checkPlayer(this);
 		
 		if(contactPlayer == true && this.type == typeEnemy) {

@@ -72,7 +72,7 @@ public class MON_GreatGoat extends Entity {
 		if(i<25) {
 			dropItem(new OBJ_Boots(gp));
 		}
-		if(i>=25 && i <50) {
+		if(i>=25 && i <50 && gp.player.life < gp.player.maxLife) {
 			if (i < 35) {
 				dropItem(new OBJ_HalfHeartPickUp(gp));
 			}
@@ -86,7 +86,7 @@ public class MON_GreatGoat extends Entity {
 		if(i>60 && i<=75) {
 			dropItem(new OBJ_ShieldPickUp(gp));
 		}
-		if(i>95 && gp.player.enemiesKilled >= 20 && gp.hasDroppedBehelit == false) {
+		if(i>90 && gp.player.enemiesKilled >= 20 && gp.hasDroppedBehelit == false) {
 			dropItem(new OBJ_Behelit(gp));
 		}
 	}

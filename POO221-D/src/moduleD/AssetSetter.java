@@ -59,7 +59,6 @@ public class AssetSetter {
 			for (int i = 0; i< gp.enem.length; i++) {
 				if(gp.enem[i] == null && i != 0 && numEnemSpawn > 0) {
 					typeEnemSpawn = new Random().nextInt(100)+1;
-					
 					if(typeEnemSpawn <= 75) {
 						gp.enem[i] = new MON_SlimeEye(gp);
 						if(typeEnemSpawn < 15) {

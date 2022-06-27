@@ -78,7 +78,7 @@ public class MON_SlimeEye extends Entity{
 		if(i>55 && i<= 60) {
 			dropItem(new OBJ_ShieldPickUp(gp));
 		}
-		if(i>75) {
+		if(i>75 && gp.player.life < gp.player.maxLife) {
 			if (i < 90) {
 				dropItem(new OBJ_HalfHeartPickUp(gp));
 			}
